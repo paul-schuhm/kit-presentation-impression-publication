@@ -1,7 +1,7 @@
 ---
 paginate: true
 headingDivider: 2
-footer: Footer
+footer: Footer de chaque slide
 theme: theme
 ---
 

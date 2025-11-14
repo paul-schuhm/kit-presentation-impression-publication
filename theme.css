@@ -1,8 +1,14 @@
 /* @theme theme */
 
+/* 
+  Stylesheet used by the HTML slide deck and PDF prints. 
+*/
+
 @import 'default';
 
+/* Global parameters */
 :root {
+  /* Screen width */
   width: 1280px;
   padding: 3rem;
   font-size: 15pt;
