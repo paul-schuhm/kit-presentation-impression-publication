@@ -1,0 +1,24 @@
+/* @theme theme */
+
+@import 'default';
+
+:root {
+  width: 1280px;
+  padding: 3rem;
+  font-size: 15pt;
+}
+
+/* Pagination */
+section::after {
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+/* Slide */
+section {
+  background: rgb(246, 246, 246);
+}
+
+footer{
+  font-size: 8pt;
+}

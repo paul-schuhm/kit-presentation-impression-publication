@@ -1,0 +1,85 @@
+/*Feuille de style pour publier en HTML standalone*/
+/*PDF utilise le theme (theme.css)*/
+
+html {
+  width: 80%;
+  margin: auto;
+  background: #f5f5f5;
+  font-size: 18px;
+}
+
+img:not(.fixed-size) {
+  width: 700px;
+}
+
+/*Images utilisées comme background d'une slide [bg contain...](....)*/
+img.marp-bg-img {
+  width: 500px;
+}
+
+/*Masque la figcaption généré par marpit pour les images en background d'une slide*/
+img.marp-bg-img ~ figcaption {
+  display: none;
+}
+
+/* Table des matières (générée par pandoc) */
+nav#TOC > ul > li > ul {
+  columns: 3; /* nombre de colonnes */
+  -webkit-columns: 3; /* compatibilité Safari */
+  -moz-columns: 3; /* compatibilité Firefox */
+  column-gap: 2rem; /* espace entre les colonnes */
+  font-size: 8pt;
+}
+&::before {
+  content: "Table des matières";
+}
+
+/* Code */
+pre {
+  background: white;
+  padding: 16px;
+}
+
+/* H2 sert de division pour les slides et donc pour les sections */
+h2 {
+  margin-top: 64px;
+}
+
+blockquote {
+  color: black;
+  background: #d4d4d4;
+  border: 1px solid black;
+  display: inline-block;
+  padding: 16px 12px;
+
+  code {
+    font-style: normal;
+  }
+  p {
+    display: inline;
+  }
+}
+blockquote::before {
+  content: "💬";
+  margin-right: 4px;
+}
+
+li {
+  margin-top: 10px;
+}
+
+/*H2 Anchors*/
+
+/* Masquer le lien '#' à côté du h2 */
+h2[id] a {
+  text-decoration: none;
+  opacity: 0; /* invisible par défaut */
+  transition: opacity 0.2s;
+  color: inherit;
+  font-size: 0.8em;
+}
+
+/* Lien visible seulement au survol du h2 */
+h2[id]:hover a {
+  opacity: 1;
+}

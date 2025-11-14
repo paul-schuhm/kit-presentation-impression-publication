@@ -1,0 +1,69 @@
+#!/usr/bin/bash
+
+# This program print Markdown sources to different formats (HTML, HTML Single Page, PDF, epub) and
+# allows to publish them on a ftp server.
+# This program uses and requires marp, pandoc and lftp.
+
+#Alias and functions
+
+MD2PDF="marp --html --theme theme.css --pdf --allow-local-files"
+MD2HTML_SLIDES_DECK="marp --html --allow-local-files"
+
+function md2htmlsingle(){
+	filename="${1%%.*}"
+	#Create an empty stylesheet if not found
+	if [ -e "style.css" ]; then
+		echo "Stylesheet style.css found"
+	else
+		touch style.css
+		echo "Empty stylesheet style.css created"
+	fi
+	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${filename}.html --toc --toc-depth=2 --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
+	echo "Saved to $filename.html";
+}
+
+#Charge credentials acces SFTP
+if [[ -f ".env" ]]; then
+    source .env
+else
+    echo ".env not found"
+    exit 1
+fi
+
+# Print SOURCES to HTML slide-deck, HTML Single Page, PDF and Epub
+for file in "${SOURCES[@]}"; do
+  echo "Publication of $file..."
+  "MD2HTML_SLIDES_DECK" "$file"
+  "MD2PDF" "$file"
+   md2htmlsingle "$file"
+done
+
+exit 0
+
+# Publish on ftp server (option --ftp)
+for src in "${SOURCES[@]}"; do
+
+    base="${src%.md}"
+
+    # Iterate through extensions
+    for ext in pdf html; do
+        file="${base}.${ext}"
+        echo "Publication of $file..."
+
+      if [[ ! -f "$file" ]]; then
+        echo "Error : file $file does not exist."
+        exit 1
+      fi
+
+# Upload to ftp server in $REMOTE_DIR
+lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<EOF
+cd $REMOTE_DIR
+put $file
+bye
+EOF
+done
+
+echo "File $file published on $FTP_HOST/$REMOTE_DIR"
+done
+
+
