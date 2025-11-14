@@ -34,7 +34,7 @@ img:not(.fixed-size) {
 
 /*Target images used as background slide image by marp [bg contain...](....)*/
 img.marp-bg-img {
-  width: 500px;
+  width: 600px;
 }
 
 /*Hide figcaption generated par marpit for background slide image*/

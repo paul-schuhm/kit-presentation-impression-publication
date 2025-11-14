@@ -113,6 +113,9 @@ for file in "${SOURCES[@]}"; do
         continue
  fi
 
+    # Add class to each slide bg img (idempotent)
+    sed -i 's/!\[bg \([^]]*\)\](\([^)]*\))\({\.marp-bg-img}\)\?/![bg \1](\2){.marp-bg-img}/g' "$file"
+
     base=$(basename "$file" .md)
 
     echo "Publication of $file..."
