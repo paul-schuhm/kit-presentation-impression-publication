@@ -1,4 +1,8 @@
 ---
+title: Marp slide deck
+description: An example slide deck created by Marp CLI
+author: Paul Schuhmacher
+keywords: marp,marp-cli,slide, kit
 paginate: true
 headingDivider: 2
 footer: Footer de chaque slide

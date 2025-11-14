@@ -98,8 +98,18 @@ Pour la mise en page, utiliser/éditer les fichiers CSS suivants :
 4. **Imprimer (et publier)** : 
 
 ~~~bash
-# Imprimer uniquement (documents déposés dans public/)
+# Aide
+./publish -h
+# Imprimer uniquement dans tous les formats (par défaut)
 ./publish
+# Seulement HTML deck
+./publish.sh --no-html-single --no-pdf --epub --html-deck
+# Ou directement
+./publish.sh --slides-only
+# Seulement HTML deck + PDF :
+./publish.sh --html-deck --pdf --no-html-single --no-epub
+# Seulement epub
+./publish.sh --no-html-single --no-html-deck --no-pdf --epub
 # Imprimer et publier sur un serveur ftp
 ./publish --ftp
 ~~~
@@ -108,7 +118,7 @@ Les documents imprimés sont placés par défaut dans le dossier `public`.
 
 ## Commentaires
 
-- Les slides sont au format [(Marpit) Markdown](https://marpit.marp.app/markdown). Le framework Marpit permet donc de créer des **_slides decks_ assez minimalistes**, dans le sens *positif* du terme (*content first* : contenu et hiérarchie claire). **Si vous voulez créer des transitions ou des mises en page sophistiquées, ce n'est peut-être pas l'outil recommandé pour vous** ;
+- Les slides sont au format [(Marpit) Markdown](https://marpit.marp.app/markdown). Le framework Marpit permet donc de créer des **_slides decks_ assez minimalistes**, dans le sens *positif* du terme (*content first* : contenu et hiérarchie claire). **Si vous voulez créer des transitions ou des mises en page sophistiquées, ce n'est peut-être pas l'outil recommandé pour vous** ([même si vous pouvez évidemment le faire avec marp](https://github.com/marp-team/marp-cli/blob/main/docs/bespoke-transitions/README.md)) ;
 - Les documents publiés **ne contiennent pas les commentaires** placés dans vos sources Markdown. N'hésitez donc pas à vous en servir pour annoter vos sources ;
 - Une table des matières est générée pour le format *HTML Single Page*, afin d'**améliorer la navigabilité** (désactivable, produite par pandoc) ;
 - La procédure pour imprimer au format *HTML Single Page* utilise [un script LUA](./h2-link.lua) pour **générer des ancres pour chaque titre de niveau 2**. Cela permet de **créer et partager des URL vers chaque section du document !** 
