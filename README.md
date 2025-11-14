@@ -98,24 +98,39 @@ Pour la mise en page, utiliser/éditer les fichiers CSS suivants :
 4. **Imprimer (et publier)** : 
 
 ~~~bash
-# Afficher l'aide
+# Affiche l'aide
 ./publish -h
-# Imprimer uniquement dans tous les formats (par défaut)
+# Imprime dans tous les formats (par défaut)
 ./publish
-# Seulement HTML deck
+# Imprime seulement HTML deck
 ./publish.sh --no-html-single --no-pdf --epub --html-deck
 # Ou directement
 ./publish.sh --slides-only
-# Seulement HTML deck + PDF :
+# Imprime seulement HTML deck + PDF :
 ./publish.sh --html-deck --pdf --no-html-single --no-epub
-# Seulement epub
+# Imprime seulement epub
 ./publish.sh --no-html-single --no-html-deck --no-pdf --epub
-# Imprimer et publier sur un serveur ftp tous les formats par défaut
-./publish --ftp
-./publish --ftp
 ~~~
 
 > Les documents imprimés sont placés par défaut dans le dossier `public/`.
+
+
+Pour **imprimer et publier** sur un serveur ftp :
+
+~~~bash
+# Imprime et Publie sur un serveur ftp  (documents HTML Single Page et PDF par défaut) 
+./publish --ftp
+~~~
+
+Pour configurer les formats à publier sur le serveur ftp, utiliser les variables d'environnement suivantes :
+
+~~~bash
+#Valeurs par défaut
+do_publish_html_single=true
+do_publish_html_pdf=true
+do_publish_html_deck=false
+do_publish_html_epub=false
+~~~
 
 ## Commentaires
 

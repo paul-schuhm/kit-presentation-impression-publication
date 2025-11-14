@@ -96,8 +96,6 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-
-
 # Print SOURCES to HTML slide-deck, HTML Single Page, PDF and Epub
 
 echo "[ Printing ]"
@@ -152,7 +150,7 @@ if $do_publish_on_ftp_server; then
 
     base="${src%.md}"
 
-    #Collection of files to publish
+    #Build collection of files to publish (based on user choices)
     files_to_publish=()
         [ "$do_publish_html_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.pdf")
         [ "$do_publish_html_single" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.html")
@@ -175,9 +173,9 @@ put $file
 bye
 EOF
         then
-        echo "File $file published on $FTP_HOST/$REMOTE_DIR"
+        echo "File $file published on $FTP_HOST/$REMOTE_DIR !"
         else
-        echo "Failed to upload $file" >&2
+        echo "Error: Failed to upload $file" >&2
         fi
     done
   done
