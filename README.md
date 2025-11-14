@@ -98,7 +98,7 @@ Pour la mise en page, utiliser/éditer les fichiers CSS suivants :
 4. **Imprimer (et publier)** : 
 
 ~~~bash
-# Aide
+# Afficher l'aide
 ./publish -h
 # Imprimer uniquement dans tous les formats (par défaut)
 ./publish
@@ -110,11 +110,12 @@ Pour la mise en page, utiliser/éditer les fichiers CSS suivants :
 ./publish.sh --html-deck --pdf --no-html-single --no-epub
 # Seulement epub
 ./publish.sh --no-html-single --no-html-deck --no-pdf --epub
-# Imprimer et publier sur un serveur ftp
+# Imprimer et publier sur un serveur ftp tous les formats par défaut
+./publish --ftp
 ./publish --ftp
 ~~~
 
-Les documents imprimés sont placés par défaut dans le dossier `public`.
+> Les documents imprimés sont placés par défaut dans le dossier `public/`.
 
 ## Commentaires
 

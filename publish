@@ -152,26 +152,33 @@ if $do_publish_on_ftp_server; then
 
     base="${src%.md}"
 
-    # Iterate through publications (file extensions)
-    for ext in .pdf .html .epub -deck.html; do
-        file="${OUTPUT_DIR}/${base}${ext}"
+    #Collection of files to publish
+    files_to_publish=()
+        [ "$do_publish_html_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.pdf")
+        [ "$do_publish_html_single" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.html")
+        [ "$do_publish_html_deck" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}-deck.html")
+        [ "$do_publish_html_epub" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.epub")
+
+    # Iterate through publications
+     for file in "${files_to_publish[@]}"; do
+
         echo "Publication of $file..."
 
-      if [[ ! -f "$file" ]]; then
-        echo "Error : file $file does not exist."
-        continue
-      fi
+        if [[ ! -f "$file" ]]; then
+          echo "Error : file $file does not exist."
+          continue
+        fi
       
-if lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<EOF
+        if lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<EOF
 cd $REMOTE_DIR
 put $file
 bye
 EOF
-    then
+        then
         echo "File $file published on $FTP_HOST/$REMOTE_DIR"
-    else
+        else
         echo "Failed to upload $file" >&2
-    fi
+        fi
     done
   done
 fi
