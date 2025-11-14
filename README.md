@@ -1,4 +1,4 @@
-# Kit de publication et de diffusion
+# Kit de publication et de diffusion de supports de présentation
 
 
 <!-- 
@@ -6,7 +6,7 @@ Activation des modules de pandoc (math)
  -->
 
 
-- [Kit de publication et de diffusion](#kit-de-publication-et-de-diffusion)
+- [Kit de publication et de diffusion de supports de présentation](#kit-de-publication-et-de-diffusion-de-supports-de-présentation)
   - [Dépendances](#dépendances)
   - [Design](#design)
   - [Usage (*workflow*)](#usage-workflow)
@@ -19,7 +19,7 @@ Activation des modules de pandoc (math)
   - [Liens utiles](#liens-utiles)
 
 
-Ce kit permet d'écrire des supports de présentation (*slides* *first*) afin de les *imprimer* :
+Ce kit permet de créer des supports de présentation (*slides* *first*) afin de les *imprimer* :
 
 - Au format *HTML slide deck*, pour la présentation ;
 - Au format *HTML Single Page* pour diffuser une version web autonome sur une URL. Idéal pour *diffuser une mise à jour* du support et pour *naviguer* dans le document ;
@@ -98,8 +98,9 @@ Pour la mise en page, utiliser/éditer les fichiers CSS suivants :
 4. **Imprimer (et publier)** : 
 
 ~~~bash
+# Imprimer uniquement (documents déposés dans public/)
 ./publish
-#Publier et diffuser via ftp
+# Imprimer et publier sur un serveur ftp
 ./publish --ftp
 ~~~
 
@@ -108,10 +109,11 @@ Les documents imprimés sont placés par défaut dans le dossier `public`.
 ## Commentaires
 
 - Les slides sont au format [(Marpit) Markdown](https://marpit.marp.app/markdown). Le framework Marpit permet donc de créer des **_slides decks_ assez minimalistes**, dans le sens *positif* du terme (*content first* : contenu et hiérarchie claire). **Si vous voulez créer des transitions ou des mises en page sophistiquées, ce n'est peut-être pas l'outil recommandé pour vous** ;
-- La procédure pour transformer le *slides deck* Markdown en *HTML Single Page* utilise [un script LUA](./h2-link.lua) pour générer des ancres pour chaque titre de niveau 2. Cela permet de **créer des URL et partager des URL vers chaque section du document** !
-- Le document imprimé au format *HTML Single Page* est **autonome** : il contient la feuille de style et toutes les images. Il est donc assez lourd mais peut être diffusé facilement ;
-- Pandoc génère une table des matières pour le format *HTML Single Page*, pour faciliter la navigabilité (désactivable)
-- Marp propose une option pratique pour [mettre une image en background d'une slide](https://marpit.marp.app/image-syntax?id=slide-backgrounds). Ces images ont tendance à casser les formats de document *HTML Single Page* et epub (taille image et caption). Pour cela, une classe `.marp-bg-img` leur est automatiquement ajouté à l'impression. Utilisez cette classe dans votre `style.css` pour redimensionner l'image à votre convenance ;
+- Les documents publiés **ne contiennent pas les commentaires** placés dans vos sources Markdown. N'hésitez donc pas à vous en servir pour annoter vos sources ;
+- Une table des matières est générée pour le format *HTML Single Page*, afin d'**améliorer la navigabilité** (désactivable, produite par pandoc) ;
+- La procédure pour imprimer au format *HTML Single Page* utilise [un script LUA](./h2-link.lua) pour **générer des ancres pour chaque titre de niveau 2**. Cela permet de **créer et partager des URL vers chaque section du document !** 
+- Le document imprimé au format *HTML Single Page* est **autonome** : il contient la feuille de style ainsi que toutes les images. Il peut donc être assez lourd, mais peut être distribué plus facilement ;
+- Marp propose une option pratique pour [mettre une image en background d'une slide](https://marpit.marp.app/image-syntax?id=slide-backgrounds). Ces images ont tendance à casser les formats de document *HTML Single Page* et epub (taille image et caption). Pour cela, une classe `.marp-bg-img` leur est automatiquement ajouté à l'impression. **Utilisez la classe `.marp-bg-img`** dans votre `style.css` pour **styliser** (redimensionner, etc.) **ces images de background** à votre convenance ;
 
 ## Conseils
 
