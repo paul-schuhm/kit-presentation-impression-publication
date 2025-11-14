@@ -9,14 +9,14 @@ Activation des modules de pandoc (math)
 - [Kit de publication et de diffusion](#kit-de-publication-et-de-diffusion)
   - [Dépendances](#dépendances)
   - [Design](#design)
-  - [Usage](#usage)
+  - [Usage (*workflow*)](#usage-workflow)
     - [Configuration](#configuration)
     - [Écriture (dev)](#écriture-dev)
     - [Mise en page](#mise-en-page)
     - [Publication et diffusion (prod)](#publication-et-diffusion-prod)
   - [Commentaires](#commentaires)
   - [Conseils](#conseils)
-  - [Références utiles](#références-utiles)
+  - [Liens utiles](#liens-utiles)
 
 
 Ce kit permet d'écrire des supports de présentation (*slides* *first*) afin de les *imprimer* :
@@ -49,7 +49,7 @@ chmod +x publish
 ## Design
 
 
-## Usage
+## Usage (*workflow*)
 
 > À adapter, améliorer en fonction des besoins.
 
@@ -107,7 +107,7 @@ Les documents imprimés sont placés par défaut dans le dossier `public`.
 
 ## Commentaires
 
-- Les slides sont au format [(Marpit) Markdown](https://marpit.marp.app/markdown). Le framework Marpit permet donc de créer des **_slides decks_ assez minimalistes**, dans le sens *positif* du terme (*content first*). **Si vous voulez créer des transitions ou des mises en page sophistiquées, ce n'est peut-être pas l'outil recommandé pour vous** ;
+- Les slides sont au format [(Marpit) Markdown](https://marpit.marp.app/markdown). Le framework Marpit permet donc de créer des **_slides decks_ assez minimalistes**, dans le sens *positif* du terme (*content first* : contenu et hiérarchie claire). **Si vous voulez créer des transitions ou des mises en page sophistiquées, ce n'est peut-être pas l'outil recommandé pour vous** ;
 - La procédure pour transformer le *slides deck* Markdown en *HTML Single Page* utilise [un script LUA](./h2-link.lua) pour générer des ancres pour chaque titre de niveau 2. Cela permet de **créer des URL et partager des URL vers chaque section du document** !
 - Le document imprimé au format *HTML Single Page* est **autonome** : il contient la feuille de style et toutes les images. Il est donc assez lourd mais peut être diffusé facilement ;
 - Pandoc génère une table des matières pour le format *HTML Single Page*, pour faciliter la navigabilité (désactivable)
@@ -116,10 +116,11 @@ Les documents imprimés sont placés par défaut dans le dossier `public`.
 ## Conseils
 
 - Adapter les fichiers `style.css` et `theme.css` à vos besoins ;
-- Le Markdown n'est pas conçu pour la mise en page. Aussi, si vous avez besoin de définir des contraintes de dimension sur vos images, des classes ou id, préférer **utiliser directement [le tag HTML `img`](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/img)** plutôt que la syntaxe Markdown.
+- **Le Markdown n'est pas conçu pour la mise en forme**. Aussi, si vous avez besoin de définir des contraintes de dimension sur vos images, des classes ou id, préférer **utiliser directement [le tag HTML `img`](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/img)** plutôt que la syntaxe Markdown.
+- *Lots of room for improvement !* Il y a encore *beaucoup* de choses à améliorer. Disposer d'*une seule source pour le contenu* que l'on publie vers *différents formats* soulève pas mal de questions intéressantes, fait réfléchir au *design* du système et pose des petites difficultés que l'on peut (apprendre à) résoudre.
 
-## Références utiles
+## Liens utiles
 
 - [Marp](https://marp.app/), créer ses diapos dans un écosystème full Markdown. Réutiliser ainsi facilement le contenu structuré de vos présentations pour les publier en PDF ou HTML, ou inversement. Basé sur [Marpit](https://marpit.marp.app/), 
-- [poc Marp](https://github.com/websealevel/poc-marp), un dépôt simple qui sert de référence sur l'usage de Marp
 - [pandoc](https://pandoc.org/index.html) : convertisseur de document universel
+- [poc Marp](https://github.com/websealevel/poc-marp), un dépôt simple qui sert de référence sur l'usage de Marp
