@@ -1,10 +1,10 @@
 .env
 public
 references
-assets
 *.pdf
 *.html
 *.md
 !module-01.md
 !module-02.md
 .vscode
+*.excalidraw
