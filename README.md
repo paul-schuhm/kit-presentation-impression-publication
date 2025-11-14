@@ -48,7 +48,7 @@ chmod +x publish
 
 ## Design
 
-<img src="./assets/dfd-print-publish.svg" width=400>
+<img src="./assets/dfd-print-publish.svg" width=700>
 
 ## Usage (*workflow*)
 
