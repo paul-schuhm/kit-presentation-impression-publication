@@ -8,8 +8,8 @@ Activation des modules de pandoc (math)
 
 - [Kit de publication et de diffusion de supports de présentation](#kit-de-publication-et-de-diffusion-de-supports-de-présentation)
   - [Design](#design)
-  - [Usage (*workflow*)](#usage-workflow)
   - [Dépendances](#dépendances)
+  - [Usage (*workflow*)](#usage-workflow)
     - [Configuration](#configuration)
     - [Écriture (dev)](#écriture-dev)
     - [Mise en page](#mise-en-page)
@@ -40,11 +40,6 @@ Ce kit permet de créer des supports de présentation (*slides* *first*) afin de
 
 <img src="./assets/dfd-print-publish.svg" width=700>
 
-## Usage (*workflow*)
-
-> À adapter, améliorer en fonction des besoins.
-
-
 ## Dépendances
 
 - [Marp](https://marp.app/), framework de création de *slides deck* à partir de fichiers Markdown, basé sur [marpit](https://marpit.marp.app/) ;
@@ -56,6 +51,10 @@ Rendre le script `publish` exécutable :
 ~~~bash
 chmod +x publish
 ~~~
+
+## Usage (*workflow*)
+
+> À adapter, améliorer en fonction des besoins.
 
 ### Configuration
 
