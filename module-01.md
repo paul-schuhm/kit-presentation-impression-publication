@@ -8,9 +8,9 @@ headingDivider: 2
 theme: theme
 ---
 
-# Présentation du kit
+# Support de présentation démo
 
-Kit d'édition, d'impression et de publication de supports de présentation au format Markdown.
+Une *dummy demo*, présentant le kit d'édition, d'impression et de publication de supports de présentation au format Markdown.
 
 ## Design
 
