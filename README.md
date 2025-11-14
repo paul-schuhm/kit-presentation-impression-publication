@@ -63,8 +63,8 @@ pandoc -v
 lftp -v
 ~~~
 
-1. **Dupliquer** le kit de départ (Recommandé : automatiser cette tâche avec un script) ;
-2. **Créer** un fichier `.env` pour y renseigner la liste des sources à imprimer et vos *credentials* FTP pour publication :
+1. **Dupliquer** le kit de départ (Recommandé : automatiser cette tâche avec un script);
+2. **Créer** un fichier `.env` pour y renseigner la liste des sources à imprimer et vos *credentials* FTP pour publication:
 
 ~~~bash
 cp .env.dist .env
