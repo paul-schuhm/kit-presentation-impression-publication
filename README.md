@@ -75,7 +75,7 @@ cp .env.dist .env
 1. **Start** the *watch* mode on the file you are working on:
 
 ~~~bash
-marp --html -w --allow-local-files source.md
+marp --html --theme theme.css -w --allow-local-files source.md
 ~~~
 
 > Create an alias: `alias marpw="marp --html --theme theme.css -w --allow-local-files"` then `marpw source.md`

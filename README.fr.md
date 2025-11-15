@@ -71,10 +71,10 @@ cp .env.dist .env
 2. Lancer le *watch* du support sur lequel vous travaillez :
 
 ~~~bash
-marp --html -w --allow-local-files source.md
+marp --html --theme theme.css -w --allow-local-files source.md
 ~~~
 
-> Se créer un alias : `alias marpw="marp --html -w --allow-local-files"` puis `marpw source.md`
+> Se créer un alias : `alias marpw="marp --html --theme theme.css -w --allow-local-files"` puis `marpw source.md`
 
 Ouvrir la version HTML (`source.html`). Dès que le fichier sera édité, le support sera mis à jour (*hot reload*).
 
