@@ -6,8 +6,8 @@
   - [Dependencies](#dependencies)
   - [Getting Started (workflow)](#getting-started-workflow)
     - [Setup](#setup)
-    - [Writing (dev)](#writing-dev)
-    - [Layout](#layout)
+    - [Write (dev)](#write-dev)
+    - [Layout and format](#layout-and-format)
     - [Print and publish (production)](#print-and-publish-production)
   - [Notes](#notes)
   - [Tips](#tips)
@@ -69,7 +69,7 @@ lftp -v
 cp .env.dist .env
 ~~~
 
-### Writing (dev)
+### Write (dev)
 
 1. **Start** the *watch* mode on the file you are working on:
 
@@ -83,7 +83,7 @@ marp --html -w --allow-local-files source.md
 3. **Write and develop** your materials in Markdown ([Markdown Marpit flavor](https://marpit.marp.app/markdown)).
 
 
-### Layout
+### Layout and format
 
 For layout, edit the following CSS files:
 
