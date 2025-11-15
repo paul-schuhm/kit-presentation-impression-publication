@@ -6,9 +6,9 @@
   - [Dependencies](#dependencies)
   - [Getting Started (workflow)](#getting-started-workflow)
     - [Setup](#setup)
-    - [Write (dev)](#write-dev)
+    - [Write](#write)
     - [Layout and format](#layout-and-format)
-    - [Print and publish (production)](#print-and-publish-production)
+    - [Print and publish](#print-and-publish)
   - [Notes](#notes)
   - [Tips](#tips)
   - [Useful links](#useful-links)
@@ -69,7 +69,7 @@ lftp -v
 cp .env.dist .env
 ~~~
 
-### Write (dev)
+### Write
 
 1. **Start** the *watch* mode on the file you are working on:
 
@@ -93,7 +93,7 @@ For layout, edit the following CSS files:
 > You can easily override CSS for epub with the [CSS media queries](https://developer.mozilla.org/fr/docs/Web/CSS/Guides/Media_queries/Using#types_de_m%C3%A9dia) : `@media print{...} query`, and for HTML Single Page with `@media screen{...}`.
 
 
-### Print and publish (production)
+### Print and publish
 
 
 ~~~bash
