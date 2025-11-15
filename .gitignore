@@ -8,3 +8,4 @@ references
 !module-02.md
 .vscode
 *.excalidraw
+!README.fr.md

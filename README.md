@@ -1,64 +1,58 @@
-# Kit de publication et de diffusion de supports de présentation
+# Publishing and Distribution Kit for Markdown Presentations
 
+🇫🇷 [French version](README.fr.md)
 
-<!-- 
-Activation des modules de pandoc (math)
- -->
-
-
-- [Kit de publication et de diffusion de supports de présentation](#kit-de-publication-et-de-diffusion-de-supports-de-présentation)
+- [Publishing and Distribution Kit for Markdown Presentations](#publishing-and-distribution-kit-for-markdown-presentations)
   - [Design](#design)
-  - [Dépendances](#dépendances)
-  - [Usage (*workflow*)](#usage-workflow)
-    - [Configuration](#configuration)
-    - [Écriture (dev)](#écriture-dev)
-    - [Mise en page](#mise-en-page)
-    - [Publication et diffusion (prod)](#publication-et-diffusion-prod)
-  - [Commentaires](#commentaires)
-  - [Conseils](#conseils)
-  - [Liens utiles](#liens-utiles)
+  - [Dependencies](#dependencies)
+  - [Getting Started (workflow)](#getting-started-workflow)
+    - [Setup](#setup)
+    - [Writing (dev)](#writing-dev)
+    - [Layout](#layout)
+    - [Print and publish (production)](#print-and-publish-production)
+  - [Notes](#notes)
+  - [Tips](#tips)
+  - [Useful links](#useful-links)
 
 
-Ce kit permet de créer des supports de présentation (*slides* *first*) afin de les *imprimer* :
+This kit allows you to create presentation materials (slides first) for *printing*:
 
-- Au format *HTML slide deck*, pour la présentation ;
-- Au format *HTML Single Page* pour diffuser une version web autonome sur une URL. Idéal pour *diffuser une mise à jour* du support et pour *naviguer* dans le document ;
-- Au format *PDF*, pour diffuser une version fixe et portable ;
-- Au format *epub*.
+- As an *HTML slide deck* for *live presentation*,
+- As an *HTML Single Page* to *distribute* a *standalone* web version on a URL. Ideal for publishing updates and for navigating through the document,
+- As a *PDF* for a fixed, portable version,
+- As an *epub*.
 
-> On suit **la nécessaire et salutaire séparation du contenu et de la forme**.
+The kit can also *publish* the different outputs to an (S)FTP server
 
-- Le kit permet également de publier les différents supports sur un serveur ftp ;
-- Les supports de formation sont écrits en **Markdown**. Le document Markdown supporte :
-  -  Le code ;
-  -  Les expressions mathématiques (teX) ;
-  -  Les images.
+Presentation materials are written in Markdown. The Markdown document supports, among other things:
 
-
+  - Formatted code;
+  - Mathematical expressions (TeX);
+  - Images.
 
 ## Design
 
+- It is *simple*;
+- It follows the necessary and beneficial *separation* of *content* and *form*.
+
 <img src="./assets/dfd-print-publish.svg" width=700>
 
-## Dépendances
 
-- [Marp](https://marp.app/), framework de création de *slides deck* à partir de fichiers Markdown, basé sur [marpit](https://marpit.marp.app/) ;
-- [pandoc](https://pandoc.org/index.html), convertisseur de document universel (par exemple Markdown vers PDF). Très puissant et facile à scripter ;
-- [lftp](https://github.com/lavv17/lftp), client ftp. Peut être remplacé par un autre programme facilement
+## Dependencies
 
-Rendre le script `publish` exécutable : 
+- [Marp](https://marp.app/), a slide deck framework built on Markdown, based on [marpit](https://marpit.marp.app);
+- [pandoc](https://pandoc.org/index.html), a universal document converter. Very powerful and easy to script (lovely);
+- [lftp](https://github.com/lavv17/lftp), an FTP client. Can easily be replaced by another program.
 
-~~~bash
-chmod +x publish
-~~~
 
-## Usage (*workflow*)
+## Getting Started (workflow)
 
-> À adapter, améliorer en fonction des besoins.
 
-### Configuration
+> Adapt and improve as needed.
 
-Vérifier que `marp`, `pandoc` et `lftp` sont bien installés :
+### Setup
+
+0. **Verify** that `marp`, `pandoc`, and `lftp` are installed:
 
 ~~~bash
 marp -v
@@ -66,92 +60,93 @@ pandoc -v
 lftp -v
 ~~~
 
-1. **Dupliquer** le kit de départ (Recommandé : automatiser cette tâche avec un script);
-2. **Créer** un fichier `.env` pour y renseigner la liste des sources à imprimer et vos *credentials* FTP pour publication:
+1. **Duplicate** the starter kit (Recommended: automate this step with a script);
+2. **Create** a `.env` file to list the sources to be printed and your FTP credentials:
 
 ~~~bash
 cp .env.dist .env
 ~~~
 
-### Écriture (dev)
+### Writing (dev)
 
-2. Lancer le *watch* du support sur lequel vous travaillez :
+1. **Start** the *watch* mode on the file you are working on:
 
 ~~~bash
 marp --html -w --allow-local-files source.md
 ~~~
 
-> Se créer un alias : `alias marpw="marp --html -w --allow-local-files"` puis `marpw source.md`
+> Create an alias: `alias marpw="marp --html -w --allow-local-files"` then `marpw source.md`
 
-Ouvrir la version HTML (`source.html`). Dès que le fichier sera édité, le support sera mis à jour (*hot reload*).
+2. **Open** the generated HTML version (`source.html`). As soon as the file is edited, the output updates (*hot reload*).
+3. **Write and develop** your materials in Markdown ([Markdown Marpit flavor](https://marpit.marp.app/markdown)).
 
-3. **Écrire** et développer vos supports au format Markdown ([Markdown Marpit flavor](https://marpit.marp.app/markdown)) ;
 
-### Mise en page
+### Layout
 
-Pour la mise en page, utiliser/éditer les fichiers CSS suivants :
+For layout, edit the following CSS files:
 
-- `theme.css` : utilisé par *HTML slide deck* et *PDF*;
-- `style.css` : utiliser par *HTML Single Page* et *epub*
+- `theme.css`: used by *HTML slide deck* and *PDF*,
+- `style.css`: used by *HTML Single Page* and *epub*.
 
-> On pourra facilement surcharger le CSS pour le format *epub* avec [la *media query* `@media print{...}`](https://developer.mozilla.org/fr/docs/Web/CSS/Guides/Media_queries/Using#types_de_m%C3%A9dia) et pour le format *HTML Single Page* avec la *media query* `@media screen{...}` ;
+> You can easily override CSS for epub with the [CSS media queries](https://developer.mozilla.org/fr/docs/Web/CSS/Guides/Media_queries/Using#types_de_m%C3%A9dia) : `@media print{...} query`, and for HTML Single Page with `@media screen{...}`.
 
-### Publication et diffusion (prod)
 
-4. **Imprimer (et publier)** : 
+### Print and publish (production)
+
 
 ~~~bash
-# Affiche l'aide
+# Show help
 ./publish -h
-# Imprime dans tous les formats (par défaut)
+# Print all formats (default)
 ./publish
-# Imprime seulement HTML deck
+# Print only HTML deck
 ./publish.sh --no-html-single --no-pdf --epub --html-deck
-# Ou directement
+# Or directly
 ./publish.sh --slides-only
-# Imprime seulement HTML deck + PDF :
+# Print only HTML deck + PDF
 ./publish.sh --html-deck --pdf --no-html-single --no-epub
-# Imprime seulement epub
+# Print only epub
 ./publish.sh --no-html-single --no-html-deck --no-pdf --epub
 ~~~
 
-> Les documents imprimés sont placés par défaut dans le dossier `public/`.
+> Printed documents are placed in the `public/` directory by default.
 
-
-Pour **imprimer et publier** sur un serveur ftp :
+To print **and** **publish** to an (S)FTP server:
 
 ~~~bash
-# Imprime et Publie sur un serveur ftp  (documents HTML Single Page et PDF par défaut) 
+# Print and publish to an FTP server (HTML Single Page and PDF by default)
 ./publish --ftp
 ~~~
 
-Pour configurer les formats à publier sur le serveur ftp, utiliser les variables d'environnement suivantes :
+To configure which formats are published to FTP, use these environment variables:
 
 ~~~bash
-#Valeurs par défaut
+# Default values
 do_publish_html_single=true
 do_publish_html_pdf=true
 do_publish_html_deck=false
 do_publish_html_epub=false
 ~~~
 
-## Commentaires
 
-- Les slides sont au format [(Marpit) Markdown](https://marpit.marp.app/markdown). Le framework Marpit permet donc de créer des **_slides decks_ assez minimalistes**, dans le sens *positif* du terme (*content first* : contenu et hiérarchie claire). **Si vous voulez créer des transitions ou des mises en page sophistiquées, ce n'est peut-être pas l'outil recommandé pour vous** ([même si vous pouvez évidemment le faire avec marp](https://github.com/marp-team/marp-cli/blob/main/docs/bespoke-transitions/README.md)) ;
-- Les documents publiés **ne contiennent pas les commentaires** placés dans vos sources Markdown. N'hésitez donc pas à vous en servir pour annoter vos sources ;
-- Une table des matières est générée pour le format *HTML Single Page*, afin d'**améliorer la navigabilité** (désactivable, produite par pandoc) ;
-- La procédure pour imprimer au format *HTML Single Page* utilise [un script LUA](./h2-link.lua) pour **générer des ancres pour chaque titre de niveau 2**. Cela permet de **créer et partager des URL vers chaque section du document !** 
-- Le document imprimé au format *HTML Single Page* est **autonome** : il contient la feuille de style ainsi que toutes les images. Il peut donc être assez lourd, mais peut être distribué plus facilement ;
-- Marp propose une option pratique pour [mettre une image en background d'une slide](https://marpit.marp.app/image-syntax?id=slide-backgrounds). Ces images ont tendance à casser les formats de document *HTML Single Page* et epub (taille image et caption). Pour cela, une classe `.marp-bg-img` leur est automatiquement ajouté à l'impression. **Utilisez la classe `.marp-bg-img`** dans votre `style.css` pour **styliser** (redimensionner, etc.) **ces images de background** à votre convenance ;
+## Notes
 
-## Conseils
+- Slides use [(Marpit) Markdown](https://marpit.marp.app/markdown). Marpit enables **minimalistic slide decks** in the positive sense (*content first* with *clear hierarchy*). **If you need transitions or sophisticated layouts, this may not be the ideal tool** ([though Marp can still do it](https://github.com/marp-team/marp-cli/blob/main/docs/bespoke-transitions/README.md))
+- Published documents **do not include comments** from your source Markdown. Use comments freely to annotate your sources
+- A table of contents is generated for *HTML Single Page* to **improve navigation** (can be disabled; generated by pandoc)
+- The *HTML Single Page* print process uses a [LUA script](./h2-link.lua) to **generate anchors for each level-2 heading**, allowing **URLs pointing to each document section !**
+- The *HTML Single Page* output is **self-contained**: it embeds the stylesheet and all images. Larger, but easier to distribute
 
-- Adapter les fichiers `style.css` et `theme.css` à vos besoins ;
-- **Le Markdown n'est pas conçu pour la mise en forme**. Aussi, si vous avez besoin de définir des contraintes de dimension sur vos images, des classes ou id, préférer **utiliser directement [le tag HTML `img`](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/img)** plutôt que la syntaxe Markdown.
-- *Lots of room for improvement !* Il y a encore *beaucoup* de choses à améliorer. Disposer d'*une seule source pour le contenu* que l'on publie vers *différents formats* soulève pas mal de questions intéressantes, fait réfléchir au *design* du système et pose des petites difficultés que l'on peut (apprendre à) résoudre.
+## Tips
 
-## Liens utiles
+- Marp provides an option to set a slide background image. These images often break *HTML Single Page* and *epub* layouts (image size and caption). A `.marp-bg-img` class is automatically added when printing. Use `.marp-bg-img` in `style.css` to style/resize/change display of background images as needed;
+- Adapt `style.css` and `theme.css` to your needs;
+- **Markdown is not designed for advanced layout**. If you need image size constraints, classes, or IDs, prefer using the HTML `img` tag rather than Markdown image syntax;
+- *Lots of room for improvement !* Maintaining *one single content source* and generating *multiple formats* raises interesting design challenges and small technical issues you can (learn to) solve
 
-- [Marp](https://marp.app/), créer ses diapos dans un écosystème full Markdown. Réutiliser ainsi facilement le contenu structuré de vos présentations pour les publier en PDF ou HTML, ou inversement. Basé sur [Marpit](https://marpit.marp.app/), 
-- [pandoc](https://pandoc.org/index.html) : convertisseur de document universel
-- [poc Marp](https://github.com/websealevel/poc-marp), un dépôt simple qui sert de référence sur l'usage de Marp
+
+## Useful links
+
+- [Marp](https://marp.app/), create slide decks in a full Markdown ecosystem. Easily reuse structured content from your presentations to publish in PDF or HTML, and vice versa. Based on [Marpit](https://marpit.marp.app/);
+- [pandoc](https://pandoc.org/index.html): the universal document converter;
+- [Marp : use cases](https://github.com/websealevel/poc-marp), a simple repository serving as a reference for using Marp.
