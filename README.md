@@ -78,7 +78,7 @@ cp .env.dist .env
 marp --html -w --allow-local-files source.md
 ~~~
 
-> Create an alias: `alias marpw="marp --html -w --allow-local-files"` then `marpw source.md`
+> Create an alias: `alias marpw="marp --html --theme theme.css -w --allow-local-files"` then `marpw source.md`
 
 2. **Open** the generated HTML version (`source.html`). As soon as the file is edited, the output updates (*hot reload*).
 3. **Write and develop** your materials in Markdown ([Markdown Marpit flavor](https://marpit.marp.app/markdown)).

@@ -4,7 +4,7 @@
   Stylesheet used by the HTML slide deck and PDF prints. 
 */
 
-@import 'default';
+@import "default";
 
 /* Global parameters */
 :root {
@@ -23,8 +23,32 @@ section::after {
 /* Slide */
 section {
   background: rgb(246, 246, 246);
+  font-size: 1px;
 }
 
-footer{
+footer {
   font-size: 8pt;
+}
+
+section.lead h2 {
+  text-align: right;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 128pt;
+  letter-spacing: -2px;
+  color: gold;
+  text-align: center;
+}
+
+h2 {
+  font-size: 42pt;
+  letter-spacing: -1px;
+  &::before{
+    content: "=";
+  }
+   &::after{
+    content: "=";
+  }
 }
