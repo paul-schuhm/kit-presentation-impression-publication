@@ -35,7 +35,8 @@ Presentation materials are written in Markdown. The Markdown document supports, 
 ## Design
 
 - It is *simple*;
-- It follows the necessary and beneficial *separation* of *content* and *form*.
+- It follows the *necessary* and beneficial *separation* of *content* and *presentation*;
+- It is *just* a shell script that wraps Marp and Pandoc, adding some useful extra features to solve real use cases.
 
 <img src="./assets/dfd-print-publish.svg" width=700>
 
