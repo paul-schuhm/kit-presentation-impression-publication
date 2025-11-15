@@ -1,6 +1,5 @@
 # Publishing and Distribution Kit for Markdown Presentations
 
-🇫🇷 [French version](README.fr.md)
 
 - [Publishing and Distribution Kit for Markdown Presentations](#publishing-and-distribution-kit-for-markdown-presentations)
   - [Design](#design)
@@ -13,6 +12,9 @@
   - [Notes](#notes)
   - [Tips](#tips)
   - [Useful links](#useful-links)
+
+
+🇫🇷 [French version](README.fr.md)
 
 
 This kit allows you to create presentation materials (slides first) for *printing*:
