@@ -8,13 +8,21 @@ headingDivider: 2
 theme: theme
 ---
 
-# Support de présentation démo
+# Demo
+
+A *dummy demo* showcasing the kit for editing, printing, and publishing presentation materials in Markdown format.
 
 Une *dummy demo*, présentant le kit d'édition, d'impression et de publication de supports de présentation au format Markdown.
 
 ## Design
 
 ![bg right contain](./assets/dfd-print-publish.svg)
+
+- **A single source of truth**: the Markdown sources
+- **Separation of content and styling**: dedicated CSS stylesheets
+- **Print**: generate documents in multiple formats
+- **Publish**: distribute documents to a server (FTP by default)
+
 
 - **Une source de vérité** : les sources Markdown ;
 - **Séparation contenu et mise en forme** : feuilles de style CSS dédiées ;
@@ -29,9 +37,9 @@ Une *dummy demo*, présentant le kit d'édition, d'impression et de publication 
 
 ![bg right:63%](./assets/blackbird.jpg)
 
-> [Voir toutes les options](https://marpit.marp.app/image-syntax)
+> [See all available options](https://marpit.marp.app/image-syntax)
 
-## Mathématiques
+## Maths
 
 $$
 \vec{F} = m\,\vec{a}

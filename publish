@@ -11,9 +11,8 @@ MD2PDF=(marp --html --theme theme.css --pdf --allow-local-files)
 MD2EPUB=(pandoc --from=markdown --to=epub --css=style.css)
 OUTPUT_DIR="public"
 
-# -----------------------------
-# Fonction d'aide
-# -----------------------------
+# Helping function
+
 function show_help() {
     cat <<EOF
 Usage: $0 [options]
@@ -34,13 +33,6 @@ EOF
 }
 
 
-#Load options (FTP credentials, format by defaut)
-if [[ -f ".env" ]]; then
-    source .env
-else
-    echo ".env not found"
-    exit 1
-fi
 
 function md2htmlsingle(){
 	filename="${1%%.*}"
@@ -54,7 +46,15 @@ function md2htmlsingle(){
 	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --toc --toc-depth=2 --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
 }
 
-# Handle options
+#Load options (FTP credentials, format by defaut)
+if [[ -f ".env" ]]; then
+    source .env
+else
+    echo ".env not found"
+    exit 1
+fi
+
+# Handle user options
 while [ $# -gt 0 ]; do
     case "$1" in
         --html-single) do_html_single=true ;;
