@@ -49,9 +49,10 @@ nav#TOC > ul > li > ul {
   -moz-columns: var(--toc-columns);
   column-gap: 2rem;
   font-size: var(--toc-fontsize);
-}
-&::before {
-  content: var(--toc-before-content);
+
+  &::before {
+    content: var(--toc-before-content);
+  }
 }
 
 /* Code */
@@ -98,4 +99,20 @@ h2[id] a {
 /* Show link on h2 hover */
 h2[id]:hover a {
   opacity: 1;
+}
+
+ul {
+  list-style-type: "- ";
+
+  li {
+    /* Mettre première lettre en lower case */
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
+
+/* For single document */
+h2#table-of-contents + ul li {
+  margin: 0;
 }
