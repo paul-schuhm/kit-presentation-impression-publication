@@ -1,6 +1,6 @@
-# Publishing and Distribution Kit for Markdown Presentations
+# Publishing and distribution kit for Markdown presentations (and regular documents)
 
-- [Publishing and Distribution Kit for Markdown Presentations](#publishing-and-distribution-kit-for-markdown-presentations)
+- [Publishing and distribution kit for Markdown presentations (and regular documents)](#publishing-and-distribution-kit-for-markdown-presentations-and-regular-documents)
   - [Design](#design)
   - [Dependencies](#dependencies)
   - [Getting Started (workflow)](#getting-started-workflow)
@@ -14,7 +14,7 @@
 
 🇫🇷 [French version](README.fr.md)
 
-This toolkit lets you produce Markdown-based presentation materials (slides first) optimized for printing and multi-format distribution:
+This toolkit lets you produce Markdown-based presentation materials (*slides first*) optimized for printing and multi-format distribution:
 
 - As a *HTML slide deck* for *live presentation*,
 - As a *HTML Single Page* version for online publishing and easy navigation,
