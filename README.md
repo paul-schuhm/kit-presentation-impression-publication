@@ -29,7 +29,7 @@ Finally, the kit lets you publish your prints to a remote (S)FTP server.
 
 - It is *simple*;
 - It follows the *necessary* and beneficial *separation* of *content* and *presentation*;
-- It is *just* a shell script that wraps Marp and Pandoc, adding some useful extra features to solve real use cases.
+- It is *just* a shell script that wraps [marp](https://marp.app/) and [pandoc](https://pandoc.org/index.html), adding some *useful extra features* to solve real world use cases.
 
 <img src="./assets/dfd-print-publish.svg" width=700>
 
