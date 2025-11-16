@@ -132,7 +132,7 @@ do_publish_pdf=true
 do_publish_epub=false
 ~~~
 
-For standard document only `do_publish_html_single`, `do_publish_html_pdf` and `do_publish_html_epub` are available
+> For standard Markdown documents, only `do_publish_html_single`, `do_publish_pdf` and `do_publish_epub` options are available.
 
 ## Notes
 
