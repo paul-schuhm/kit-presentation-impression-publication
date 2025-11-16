@@ -151,7 +151,6 @@ done
 
 
 # Print standard document
-
 for file in "${SOURCES_DOCS[@]}"; do
 
     if [[ ! -f "$file" ]]; then
@@ -162,6 +161,18 @@ for file in "${SOURCES_DOCS[@]}"; do
     base=$(basename "$file" .md)
 
     echo "Publication of $file... (standard doc)"
+
+    if $do_print_html_single; then
+        echo "Printing $base to HTML ..."
+    fi
+
+    if $do_print_pdf; then
+      echo "Printing $base to PDF ..."
+    fi
+
+    if $do_print_epub; then
+        echo "Printing $base to EPUB ..."
+    fi
 
 done
 
