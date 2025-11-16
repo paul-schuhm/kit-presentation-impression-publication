@@ -126,9 +126,9 @@ To configure which formats are published to FTP, use these environment variables
 
 ~~~bash
 #Default values
+do_publish_html_deck=false
 do_publish_html_single=true
 do_publish_pdf=true
-do_publish_html_deck=false
 do_publish_epub=false
 ~~~
 

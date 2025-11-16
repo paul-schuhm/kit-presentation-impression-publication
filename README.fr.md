@@ -64,6 +64,20 @@ lftp -v
 cp .env.dist .env
 ~~~
 
+Lister les fichiers à imprimer/publier dans le fichier `.env` :
+
+~~~.env
+SOURCES_SLIDES=(
+    slide-deck.md
+    presentation.md
+)
+
+SOURCES_DOCS=(
+    document.md
+    exercices.md
+)
+~~~
+
 ### Écriture (dev)
 
 2. Lancer le *watch* du support sur lequel vous travaillez :
@@ -118,11 +132,11 @@ Pour **imprimer et publier** sur un serveur ftp :
 Pour configurer les formats à publier sur le serveur ftp, utiliser les variables d'environnement suivantes :
 
 ~~~bash
-#Valeurs par défaut
-do_publish_html_single=true
-do_publish_html_pdf=true
+#Default values
 do_publish_html_deck=false
-do_publish_html_epub=false
+do_publish_html_single=true
+do_publish_pdf=true
+do_publish_epub=false
 ~~~
 
 ## Commentaires
