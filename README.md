@@ -63,11 +63,12 @@ cp .env.dist .env
 List the files to print and publish in your `.env` file :
 
 ~~~.env
+#slide-decks
 SOURCES_SLIDES=(
     slide-deck.md
     presentation.md
 )
-
+#standard documents
 SOURCES_DOCS=(
     document.md
     exercices.md
@@ -85,14 +86,14 @@ marp --html --theme theme.css -w --allow-local-files slide-deck.md
 > Create an alias: `alias marpw="marp --html --theme theme.css -w --allow-local-files"` then `marpw slide-deck.md`
 
 2. **Open** the generated HTML version (`source.html`). As soon as the file is edited, the output updates (*hot reload*).
-3. **Write and develop** your materials in Markdown ([Markdown Marpit flavor](https://marpit.marp.app/markdown)).
+3. **Write and develop** your Markdown document ([Markdown Marpit flavor](https://marpit.marp.app/markdown)).
 
 ### Layout and format
 
-For layout, edit the following CSS files:
+For layout, edit the following CSS files :
 
 - `theme.css`: used by *HTML slide deck* and *PDF*,
-- `style.css`: used by *HTML Single Page* and *epub*.
+- `style.css`: used by *HTML Single Page* and *epub* and standard Markdown documents.
 
 > You can easily override CSS for epub with the [CSS media queries](https://developer.mozilla.org/fr/docs/Web/CSS/Guides/Media_queries/Using#types_de_m%C3%A9dia) : `@media print{...} query`, and for HTML Single Page with `@media screen{...}`.
 
@@ -122,7 +123,7 @@ To print **and** **publish** to an (S)FTP server:
 ./publish --ftp
 ~~~
 
-To configure which formats are published to FTP, use these environment variables:
+To control which formats are uploaded to the FTP server, set the following environment variables :
 
 ~~~bash
 #Default values
