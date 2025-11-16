@@ -14,12 +14,12 @@
 
 🇫🇷 [French version](README.fr.md)
 
-This kit allows you to create Markdown presentation materials (slides first) for *printing*:
+This toolkit lets you produce Markdown-based presentation materials (slides first) optimized for printing and multi-format distribution:
 
-- As an *HTML slide deck* for *live presentation*,
-- As an *HTML Single Page* to *distribute* a *standalone* web version on a URL. Ideal for publishing updates and for navigating through the document,
-- As a *PDF* for a fixed, portable version,
-- As an *epub*.
+- As a *HTML slide deck* for *live presentation*,
+- As a *HTML Single Page* version for online publishing and easy navigation,
+- As a *PDF* for a stable, portable format,
+- As an *epub* for e-readers and offline reading (and because it's the best format to read).
 
 You can *also* print *standard Markdown documents* to HTML, PDF or epub.
 
