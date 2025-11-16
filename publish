@@ -1,17 +1,19 @@
 #!/usr/bin/bash
 
-# This program print Markdown sources to different formats (HTML, HTML Single Page, PDF, epub) and
+# This program print Markdown SOURCES_SLIDES (slide-deck, standard document) 
+# to different formats (HTML, HTML Single Page, PDF, epub) and
 # allows to publish them on a ftp server.
+#
 # This program uses and requires marp, pandoc and lftp.
 
-#Alias and functions
+# == ALIASES ==
 
 MD2HTML_SLIDES_DECK=(marp --html --allow-local-files)
 MD2PDF=(marp --html --theme theme.css --pdf --allow-local-files)
 MD2EPUB=(pandoc --from=markdown --to=epub --css=style.css)
 OUTPUT_DIR="public"
 
-# Helping function
+# == FUNCTIONS ==
 
 function show_help() {
     cat <<EOF
@@ -32,9 +34,8 @@ EOF
     exit 0
 }
 
-
-
-function md2htmlsingle(){
+# Print slide-deck Markdown document to standalone HTML document
+function mdslide2htmlsingle(){
 	filename="${1%%.*}"
 	#Create an empty stylesheet if not found
 	if [ -e "style.css" ]; then
@@ -46,7 +47,54 @@ function md2htmlsingle(){
 	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --toc --toc-depth=2 --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
 }
 
-#Load options (FTP credentials, format by defaut)
+# Print standard Markdown document to standalone HTML document
+function md2htmlsingle(){
+  filename="${1%%.*}"
+	#Create an empty stylesheet if not found
+	if [ -e "style.css" ]; then
+		echo "Stylesheet style.css found"
+	else
+		touch style.css
+		echo "Empty stylesheet style.css created"
+	fi
+	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
+}
+
+# Print standard Markdown document to PDF
+ function md2pdf(){
+  filename="${1%%.*}"
+	#Create an empty stylesheet if not found
+	if [ -e "style.css" ]; then
+		echo "Stylesheet style.css found"
+	else
+		touch style.css
+		echo "Empty stylesheet style.css created"
+	fi
+  pandoc $1 -f markdown+tex_math_double_backslash -t html5 -o ${OUTPUT_DIR}/${filename}.pdf --mathml --css style.css
+ }
+
+ # Print standard Markdown document to EPUB
+ function md2epub(){
+  filename="${1%%.*}"
+	#Create an empty stylesheet if not found
+	if [ -e "style.css" ]; then
+		echo "Stylesheet style.css found"
+	else
+		touch style.css
+		echo "Empty stylesheet style.css created"
+	fi
+
+  pandoc "$1" \
+  -f markdown+tex_math_double_backslash \
+  -t epub \
+  -o "${OUTPUT_DIR}/${filename}.epub" \
+  --css style.css \
+  --mathml
+ }
+
+# == BEGINNING OF THE SCRIPT ==
+
+#Load options (FTP credentials, print and publish formats)
 if [[ -f ".env" ]]; then
     source .env
 else
@@ -57,23 +105,23 @@ fi
 # Handle user options
 while [ $# -gt 0 ]; do
     case "$1" in
-        --html-single) do_html_single=true ;;
-        --no-html-single) do_html_single=false ;;
+        --html-single) do_print_html_single=true ;;
+        --no-html-single) do_print_html_single=false ;;
 
-        --html-deck) do_html_deck=true ;;
-        --no-html-deck) do_html_deck=false ;;
+        --html-deck) do_print_html_deck=true ;;
+        --no-html-deck) do_print_html_deck=false ;;
 
-        --pdf) do_pdf=true ;;
-        --no-pdf) do_pdf=false ;;
+        --pdf) do_print_pdf=true ;;
+        --no-pdf) do_do_print_pdf=false ;;
 
-        --epub) do_epub=true ;;
-        --no-epub) do_epub=false ;;
+        --epub) do_print_epub=true ;;
+        --no-epub) do_print_epub=false ;;
 
         --slides-only)
-            do_html_single=false
-            do_html_deck=true
-            do_pdf=false
-            do_epub=false
+            do_print_html_single=false
+            do_print_html_deck=true
+            do_print_pdf=false
+            do_print_epub=false
             ;;
 
         --ftp)
@@ -81,10 +129,10 @@ while [ $# -gt 0 ]; do
           ;;
 
         --all)
-            do_html_single=true
-            do_html_deck=true
-            do_pdf=true
-            do_epub=true
+            do_publish_html_single=true
+            do_publish_html_deck=true
+            do_publish_pdf=true
+            do_publish_epub=true
             ;;
 
         -h|--help) show_help ;;
@@ -96,7 +144,7 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-# Print SOURCES to HTML slide-deck, HTML Single Page, PDF and Epub
+# Print SOURCES_SLIDES to HTML slide-deck, HTML Single Page, PDF and Epub
 
 echo "[ Printing ]"
 
@@ -106,40 +154,40 @@ mkdir -p public/assets
 cp -rn assets/* "${OUTPUT_DIR}/assets/"
 echo "Sync assets in ${OUTPUT_DIR} ... Done"
 
-for file in "${SOURCES[@]}"; do
+for file in "${SOURCES_SLIDES[@]}"; do
 
- if [[ ! -f "$file" ]]; then
+    if [[ ! -f "$file" ]]; then
         echo "Warning : file $file does not exist. Skipping file."
         continue
- fi
+    fi
 
     # Add class to each slide bg img (idempotent)
     sed -i 's/!\[bg \([^]]*\)\](\([^)]*\))\({\.marp-bg-img}\)\?/![bg \1](\2){.marp-bg-img}/g' "$file"
 
     base=$(basename "$file" .md)
 
-    echo "Publication of $file..."
+    echo "Publication of  $file... (slide-deck)"
 
-    if $do_html_deck; then
+    if $do_print_html_deck; then
       echo "Printing $base to HTML Slides Deck ..."
         "${MD2HTML_SLIDES_DECK[@]}" "$file" \
             -o "${OUTPUT_DIR}/${base}-deck.html" \
             2>/dev/null
     fi
 
-    if $do_pdf; then
+    if $do_print_html_single; then
+        echo "Printing $base to HTML Single Page ..."
+        mdslide2htmlsingle "$file" 2>/dev/null
+    fi
+
+    if $do_print_pdf; then
       echo "Printing $base to PDF..."
         "${MD2PDF[@]}" "$file" \
             -o "${OUTPUT_DIR}/${base}.pdf" \
             2>/dev/null
     fi
 
-    if $do_html_single; then
-        echo "Printing $base to HTML Single Page ..."
-        md2htmlsingle "$file" 2>/dev/null
-    fi
-
-    if $do_epub; then
+    if $do_print_epub; then
         echo "Printing $base to EPUB ..."
         "${MD2EPUB[@]}" "$file" \
             -o "${OUTPUT_DIR}/${base}.epub" \
@@ -148,25 +196,54 @@ for file in "${SOURCES[@]}"; do
 done
 
 
-# Publish on ftp server
+# Print standard document (SOURCES_DOCS)
+for file in "${SOURCES_DOCS[@]}"; do
+
+    if [[ ! -f "$file" ]]; then
+        echo "Warning : file $file does not exist. Skipping file."
+        continue
+    fi
+
+    base=$(basename "$file" .md)
+
+    echo "Publication of $file... (standard doc)"
+
+    if $do_print_html_single; then
+        echo "Printing $base to HTML ..."
+        md2htmlsingle "$file" 2>/dev/null
+    fi
+
+    if $do_print_pdf; then
+      echo "Printing $base to PDF ..."
+      md2pdf "$file" 2>/dev/null
+    fi
+
+    if $do_print_epub; then
+        echo "Printing $base to EPUB ..."
+        md2epub "$file" 2>/dev/null
+    fi
+
+done
+
+# Publish on FTP server
 if $do_publish_on_ftp_server; then
 
   echo "[ Publication ]"
   echo "Publication on remote FTP server..."
 
-  # Iterate through Sources
-  for src in "${SOURCES[@]}"; do
+  # Iterate through all sources
+  for src in "${SOURCES_SLIDES[@]}" "${SOURCES_DOCS[@]}"; do
 
     base="${src%.md}"
 
-    #Build collection of files to publish (based on user choices)
+    #Build selection of files to publish (based on user choices)
     files_to_publish=()
-        [ "$do_publish_html_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.pdf")
-        [ "$do_publish_html_single" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.html")
         [ "$do_publish_html_deck" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}-deck.html")
-        [ "$do_publish_html_epub" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.epub")
+        [ "$do_publish_html_single" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.html")
+        [ "$do_publish_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.pdf")
+        [ "$do_publish_epub" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.epub")
 
-    # Iterate through publications
+    # Iterate through selected prints to publish
      for file in "${files_to_publish[@]}"; do
 
         echo "Publication of $file..."
