@@ -70,7 +70,7 @@ function md2htmlsingle(){
 		touch style.css
 		echo "Empty stylesheet style.css created"
 	fi
-  pandoc $1 -f markdown+tex_math_double_backslash -t html5 -o ${OUTPUT_DIR}/${filename}.pdf --mathml --css style.css
+  pandoc $1 -f markdown+tex_math_double_backslash -t html5 -o ${OUTPUT_DIR}/${filename}.pdf --strip-comments --mathml --css style.css
  }
 
  # Print standard Markdown document to EPUB
