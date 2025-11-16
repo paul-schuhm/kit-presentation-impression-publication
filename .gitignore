@@ -4,7 +4,10 @@ references
 *.pdf
 *.html
 *.md
-!source.md
 .vscode
 *.excalidraw
+!README.md
 !README.fr.md
+# Sources demos
+!slide-deck.md
+!document.md

@@ -46,7 +46,7 @@ The stylesheet will be applied in the preview.
 
 ## Three useful Markdown extensions in Visual Studio Code
 
-- [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one), the most usefulextension
+- [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one), the most useful extension
 - [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint), lint your Markdown files for consistency
 - [Markdown Table](https://marketplace.visualstudio.com/items?itemName=TakumiI.markdowntable), to work more effectively with the terrible markdown table syntax and **use more tables** (which is a useful content structure !)
 
