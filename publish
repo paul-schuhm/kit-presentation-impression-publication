@@ -6,14 +6,14 @@
 #
 # This program uses and requires marp, pandoc and lftp.
 
-#Alias and functions
+# == ALIASES ==
 
 MD2HTML_SLIDES_DECK=(marp --html --allow-local-files)
 MD2PDF=(marp --html --theme theme.css --pdf --allow-local-files)
 MD2EPUB=(pandoc --from=markdown --to=epub --css=style.css)
 OUTPUT_DIR="public"
 
-# Helping function
+# == FUNCTIONS ==
 
 function show_help() {
     cat <<EOF
@@ -34,9 +34,8 @@ EOF
     exit 0
 }
 
-
-
-function md2htmlsingle(){
+# Print slide-deck Markdown document to standalone HTML document
+function mdslide2htmlsingle(){
 	filename="${1%%.*}"
 	#Create an empty stylesheet if not found
 	if [ -e "style.css" ]; then
@@ -48,7 +47,54 @@ function md2htmlsingle(){
 	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --toc --toc-depth=2 --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
 }
 
-#Load options (FTP credentials, format by defaut)
+# Print standard Markdown document to standalone HTML document
+function md2htmlsingle(){
+  filename="${1%%.*}"
+	#Create an empty stylesheet if not found
+	if [ -e "style.css" ]; then
+		echo "Stylesheet style.css found"
+	else
+		touch style.css
+		echo "Empty stylesheet style.css created"
+	fi
+	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
+}
+
+# Print standard Markdown document to PDF
+ function md2pdf(){
+  filename="${1%%.*}"
+	#Create an empty stylesheet if not found
+	if [ -e "style.css" ]; then
+		echo "Stylesheet style.css found"
+	else
+		touch style.css
+		echo "Empty stylesheet style.css created"
+	fi
+  pandoc $1 -f markdown+tex_math_double_backslash -t html5 -o ${OUTPUT_DIR}/${filename}.pdf --mathml --css style.css
+ }
+
+ # Print standard Markdown document to EPUB
+ function md2epub(){
+  filename="${1%%.*}"
+	#Create an empty stylesheet if not found
+	if [ -e "style.css" ]; then
+		echo "Stylesheet style.css found"
+	else
+		touch style.css
+		echo "Empty stylesheet style.css created"
+	fi
+
+  pandoc "$1" \
+  -f markdown+tex_math_double_backslash \
+  -t epub \
+  -o "${OUTPUT_DIR}/${filename}.epub" \
+  --css style.css \
+  --mathml
+ }
+
+# == BEGINNING OF THE SCRIPT ==
+
+#Load options (FTP credentials, print and publish formats)
 if [[ -f ".env" ]]; then
     source .env
 else
@@ -131,7 +177,7 @@ for file in "${SOURCES_SLIDES[@]}"; do
 
     if $do_print_html_single; then
         echo "Printing $base to HTML Single Page ..."
-        md2htmlsingle "$file" 2>/dev/null
+        mdslide2htmlsingle "$file" 2>/dev/null
     fi
 
     if $do_print_pdf; then
@@ -150,7 +196,7 @@ for file in "${SOURCES_SLIDES[@]}"; do
 done
 
 
-# Print standard document
+# Print standard document (SOURCES_DOCS)
 for file in "${SOURCES_DOCS[@]}"; do
 
     if [[ ! -f "$file" ]]; then
@@ -164,20 +210,22 @@ for file in "${SOURCES_DOCS[@]}"; do
 
     if $do_print_html_single; then
         echo "Printing $base to HTML ..."
+        md2htmlsingle "$file" 2>/dev/null
     fi
 
     if $do_print_pdf; then
       echo "Printing $base to PDF ..."
+      md2pdf "$file" 2>/dev/null
     fi
 
     if $do_print_epub; then
         echo "Printing $base to EPUB ..."
+        md2epub "$file" 2>/dev/null
     fi
 
 done
 
-
-# Publish on ftp server
+# Publish on FTP server
 if $do_publish_on_ftp_server; then
 
   echo "[ Publication ]"
