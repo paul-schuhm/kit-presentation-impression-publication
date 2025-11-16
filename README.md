@@ -45,7 +45,7 @@ Finally, the kit lets you publish your prints to a remote (S)FTP server.
 
 ### Setup
 
-0. **Verify** that `marp`, `pandoc`, and `lftp` are installed:
+0. **Verify** that `marp`, `pandoc`, and `lftp` are installed :
 
 ~~~bash
 marp -v
@@ -60,15 +60,17 @@ lftp -v
 cp .env.dist .env
 ~~~
 
-List the files to print and publish in your `.env` file.
+List the files to print and publish in your `.env` file :
 
 ~~~.env
 SOURCES_SLIDES=(
     slide-deck.md
+    presentation.md
 )
 
 SOURCES_DOCS=(
     document.md
+    exercices.md
 )
 ~~~
 
