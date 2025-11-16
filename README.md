@@ -1,6 +1,5 @@
 # Publishing and Distribution Kit for Markdown Presentations
 
-
 - [Publishing and Distribution Kit for Markdown Presentations](#publishing-and-distribution-kit-for-markdown-presentations)
   - [Design](#design)
   - [Dependencies](#dependencies)
@@ -13,24 +12,18 @@
   - [Tips](#tips)
   - [Useful links](#useful-links)
 
-
 🇫🇷 [French version](README.fr.md)
 
-
-This kit allows you to create presentation materials (slides first) for *printing*:
+This kit allows you to create Markdown presentation materials (slides first) for *printing*:
 
 - As an *HTML slide deck* for *live presentation*,
 - As an *HTML Single Page* to *distribute* a *standalone* web version on a URL. Ideal for publishing updates and for navigating through the document,
 - As a *PDF* for a fixed, portable version,
 - As an *epub*.
 
-The kit can also *publish* the different outputs to an (S)FTP server
+You can *also* print *standard Markdown documents* to HTML, PDF or epub.
 
-Presentation materials are written in Markdown. The Markdown document supports, among other things:
-
-  - Formatted code;
-  - Mathematical expressions (TeX);
-  - Images.
+Finally, the kit lets you publish your prints to a remote (S)FTP server.
 
 ## Design
 
@@ -40,16 +33,13 @@ Presentation materials are written in Markdown. The Markdown document supports, 
 
 <img src="./assets/dfd-print-publish.svg" width=700>
 
-
 ## Dependencies
 
 - [Marp](https://marp.app/), a slide deck framework built on Markdown, based on [marpit](https://marpit.marp.app);
 - [pandoc](https://pandoc.org/index.html), a universal document converter. Very powerful and easy to script (lovely);
 - [lftp](https://github.com/lavv17/lftp), an FTP client. Can easily be replaced by another program.
 
-
 ## Getting Started (workflow)
-
 
 > Adapt and improve as needed.
 
@@ -70,19 +60,30 @@ lftp -v
 cp .env.dist .env
 ~~~
 
+List the files to print and publish in your `.env` file.
+
+~~~.env
+SOURCES_SLIDES=(
+    slide-deck.md
+)
+
+SOURCES_DOCS=(
+    document.md
+)
+~~~
+
 ### Write
 
 1. **Start** the *watch* mode on the file you are working on:
 
 ~~~bash
-marp --html --theme theme.css -w --allow-local-files source.md
+marp --html --theme theme.css -w --allow-local-files slide-deck.md
 ~~~
 
-> Create an alias: `alias marpw="marp --html --theme theme.css -w --allow-local-files"` then `marpw source.md`
+> Create an alias: `alias marpw="marp --html --theme theme.css -w --allow-local-files"` then `marpw slide-deck.md`
 
 2. **Open** the generated HTML version (`source.html`). As soon as the file is edited, the output updates (*hot reload*).
 3. **Write and develop** your materials in Markdown ([Markdown Marpit flavor](https://marpit.marp.app/markdown)).
-
 
 ### Layout and format
 
@@ -93,9 +94,7 @@ For layout, edit the following CSS files:
 
 > You can easily override CSS for epub with the [CSS media queries](https://developer.mozilla.org/fr/docs/Web/CSS/Guides/Media_queries/Using#types_de_m%C3%A9dia) : `@media print{...} query`, and for HTML Single Page with `@media screen{...}`.
 
-
 ### Print and publish
-
 
 ~~~bash
 # Show help
@@ -124,13 +123,14 @@ To print **and** **publish** to an (S)FTP server:
 To configure which formats are published to FTP, use these environment variables:
 
 ~~~bash
-# Default values
+#Default values
 do_publish_html_single=true
-do_publish_html_pdf=true
+do_publish_pdf=true
 do_publish_html_deck=false
-do_publish_html_epub=false
+do_publish_epub=false
 ~~~
 
+For standard document only `do_publish_html_single`, `do_publish_html_pdf` and `do_publish_html_epub` are available
 
 ## Notes
 
@@ -146,7 +146,6 @@ do_publish_html_epub=false
 - Adapt `style.css` and `theme.css` to your needs;
 - **Markdown is not designed for advanced layout**. If you need image size constraints, classes, or IDs, prefer using the HTML `img` tag rather than Markdown image syntax;
 - *Lots of room for improvement !* Maintaining *one single content source* and generating *multiple formats* raises interesting design challenges and small technical issues you can (learn to) solve
-
 
 ## Useful links
 

@@ -59,23 +59,23 @@ fi
 # Handle user options
 while [ $# -gt 0 ]; do
     case "$1" in
-        --html-single) do_html_single=true ;;
-        --no-html-single) do_html_single=false ;;
+        --html-single) do_print_html_single=true ;;
+        --no-html-single) do_print_html_single=false ;;
 
-        --html-deck) do_html_deck=true ;;
-        --no-html-deck) do_html_deck=false ;;
+        --html-deck) do_print_html_deck=true ;;
+        --no-html-deck) do_print_html_deck=false ;;
 
-        --pdf) do_pdf=true ;;
-        --no-pdf) do_pdf=false ;;
+        --pdf) do_print_pdf=true ;;
+        --no-pdf) do_do_print_pdf=false ;;
 
-        --epub) do_epub=true ;;
-        --no-epub) do_epub=false ;;
+        --epub) do_print_epub=true ;;
+        --no-epub) do_print_epub=false ;;
 
         --slides-only)
-            do_html_single=false
-            do_html_deck=true
-            do_pdf=false
-            do_epub=false
+            do_print_html_single=false
+            do_print_html_deck=true
+            do_print_pdf=false
+            do_print_epub=false
             ;;
 
         --ftp)
@@ -83,10 +83,10 @@ while [ $# -gt 0 ]; do
           ;;
 
         --all)
-            do_html_single=true
-            do_html_deck=true
-            do_pdf=true
-            do_epub=true
+            do_publish_html_single=true
+            do_publish_html_deck=true
+            do_publish_pdf=true
+            do_publish_epub=true
             ;;
 
         -h|--help) show_help ;;
@@ -110,43 +110,59 @@ echo "Sync assets in ${OUTPUT_DIR} ... Done"
 
 for file in "${SOURCES_SLIDES[@]}"; do
 
- if [[ ! -f "$file" ]]; then
+    if [[ ! -f "$file" ]]; then
         echo "Warning : file $file does not exist. Skipping file."
         continue
- fi
+    fi
 
     # Add class to each slide bg img (idempotent)
     sed -i 's/!\[bg \([^]]*\)\](\([^)]*\))\({\.marp-bg-img}\)\?/![bg \1](\2){.marp-bg-img}/g' "$file"
 
     base=$(basename "$file" .md)
 
-    echo "Publication of $file..."
+    echo "Publication of  $file... (slide-deck)"
 
-    if $do_html_deck; then
+    if $do_print_html_deck; then
       echo "Printing $base to HTML Slides Deck ..."
         "${MD2HTML_SLIDES_DECK[@]}" "$file" \
             -o "${OUTPUT_DIR}/${base}-deck.html" \
             2>/dev/null
     fi
 
-    if $do_pdf; then
+    if $do_print_html_single; then
+        echo "Printing $base to HTML Single Page ..."
+        md2htmlsingle "$file" 2>/dev/null
+    fi
+
+    if $do_print_pdf; then
       echo "Printing $base to PDF..."
         "${MD2PDF[@]}" "$file" \
             -o "${OUTPUT_DIR}/${base}.pdf" \
             2>/dev/null
     fi
 
-    if $do_html_single; then
-        echo "Printing $base to HTML Single Page ..."
-        md2htmlsingle "$file" 2>/dev/null
-    fi
-
-    if $do_epub; then
+    if $do_print_epub; then
         echo "Printing $base to EPUB ..."
         "${MD2EPUB[@]}" "$file" \
             -o "${OUTPUT_DIR}/${base}.epub" \
             2>/dev/null
     fi
+done
+
+
+# Print standard document
+
+for file in "${SOURCES_DOCS[@]}"; do
+
+    if [[ ! -f "$file" ]]; then
+        echo "Warning : file $file does not exist. Skipping file."
+        continue
+    fi
+
+    base=$(basename "$file" .md)
+
+    echo "Publication of $file... (standard doc)"
+
 done
 
 
@@ -163,10 +179,10 @@ if $do_publish_on_ftp_server; then
 
     #Build collection of files to publish (based on user choices)
     files_to_publish=()
-        [ "$do_publish_html_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.pdf")
-        [ "$do_publish_html_single" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.html")
         [ "$do_publish_html_deck" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}-deck.html")
-        [ "$do_publish_html_epub" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.epub")
+        [ "$do_publish_html_single" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.html")
+        [ "$do_publish_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.pdf")
+        [ "$do_publish_epub" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.epub")
 
     # Iterate through publications
      for file in "${files_to_publish[@]}"; do

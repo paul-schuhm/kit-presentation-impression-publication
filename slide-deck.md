@@ -22,7 +22,7 @@ A *dummy demo* showcasing the kit for editing, printing, and publishing presenta
 
 ## Design
 
-![bg right contain](./assets/dfd-print-publish.svg)
+![bg right contain](./assets/dfd-print-publish.svg){.marp-bg-img}
 
 
 - **A single source of truth**: the Markdown sources;
@@ -57,7 +57,7 @@ It will be stripped out when published, useful for personal notes/comments/info.
 
 ## Background images
 
-![bg right:63%](./assets/blackbird.jpg)
+![bg right:63%](./assets/blackbird.jpg){.marp-bg-img}
 
 > [See all available options](https://marpit.marp.app/image-syntax)
 
@@ -67,7 +67,7 @@ It will be stripped out when published, useful for personal notes/comments/info.
 <!-- _color: gold -->
 <!-- _class: lead -->
 
-![bg cover grayscale:1](./assets/blackbird.jpg)
+![bg cover grayscale:1](./assets/blackbird.jpg){.marp-bg-img}
 
 
 ## Bullet points
