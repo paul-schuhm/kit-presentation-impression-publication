@@ -231,19 +231,19 @@ if $do_publish_on_ftp_server; then
   echo "[ Publication ]"
   echo "Publication on remote FTP server..."
 
-  # Iterate through SOURCES_SLIDES
-  for src in "${SOURCES_SLIDES[@]}"; do
+  # Iterate through all sources
+  for src in "${SOURCES_SLIDES[@]}" "${SOURCES_DOCS[@]}"; do
 
     base="${src%.md}"
 
-    #Build collection of files to publish (based on user choices)
+    #Build selection of files to publish (based on user choices)
     files_to_publish=()
         [ "$do_publish_html_deck" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}-deck.html")
         [ "$do_publish_html_single" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.html")
         [ "$do_publish_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.pdf")
         [ "$do_publish_epub" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.epub")
 
-    # Iterate through publications
+    # Iterate through selected prints to publish
      for file in "${files_to_publish[@]}"; do
 
         echo "Publication of $file..."
