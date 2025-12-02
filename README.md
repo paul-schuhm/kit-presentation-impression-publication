@@ -8,6 +8,7 @@
     - [Write](#write)
     - [Layout and format](#layout-and-format)
     - [Print and publish](#print-and-publish)
+  - [Cleaning prints](#cleaning-prints)
   - [Notes](#notes)
   - [Tips](#tips)
   - [Useful links](#useful-links)
@@ -129,7 +130,7 @@ To print **and** **publish** to an (S)FTP server:
 
 ~~~bash
 # Print and publish to an FTP server (HTML Single Page and PDF by default)
-./publish --ftp
+pp --ftp
 ~~~
 
 To control which formats are uploaded to the FTP server, set the following environment variables :
@@ -143,6 +144,14 @@ do_publish_epub=false
 ~~~
 
 > For standard Markdown documents, only `do_publish_html_single`, `do_publish_pdf` and `do_publish_epub` options are available.
+
+## Cleaning prints
+
+To clean local prints (in `public/`, not the sources !) :
+
+~~~bash
+pp --clean
+~~~
 
 ## Notes
 
