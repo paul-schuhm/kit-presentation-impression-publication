@@ -29,17 +29,21 @@ Options:
   --epub              Générer EPUB
   --no-epub           Ne pas générer EPUB
   --slides-only       Seulement HTML (Deck + Single Page)
+  --clean             Supprime tout le contenu publié (pas les sources ;))
   -h, --help          Afficher ce message
 EOF
     exit 0
 }
 
+
+# Print slide-deck Markdown document to slide-deck html (for live presentation)
 function mdslide2htmldeck() {
     filename=$(basename "$file" .md)
-
-    # Crée style.css si nécessaire
-    [ -e "$WORKING_DIR/style.css" ] || touch "$WORKING_DIR/style.css"
-
+    #Create an empty stylesheet if not found
+	  if [ ! -e "$WORKING_DIR/style.css" ]; then
+      touch "$WORKING_DIR/style.css"
+      echo "Local stylesheet (style.css) created"
+    fi
     marp --html --allow-local-files "$1" \
         -o "${OUTPUT_DIR}/${filename}-deck.html"
 }
@@ -125,6 +129,13 @@ while [ $# -gt 0 ]; do
             do_publish_html_deck=true
             do_publish_pdf=true
             do_publish_epub=true
+            ;;
+
+        --clean)
+            echo "Cleaning $OUTPUT_DIR ..."
+            rm -rf "$OUTPUT_DIR"/*
+            echo "Cleaning publications done."
+            exit 0
             ;;
 
         -h|--help) show_help ;;
@@ -217,8 +228,11 @@ for file in "${SOURCES_DOCS[@]}"; do
         echo "Printing $base to EPUB ..."
         md2epub "$file" 2>/dev/null
     fi
-
 done
+
+echo "[ Printing Done ]"
+echo "Generated files (prints) in $OUTPUT_DIR:"
+find "$OUTPUT_DIR" \( -path "$OUTPUT_DIR/assets" -prune \) -o \( -type f -printf " - %f\n" \)
 
 # Publish on FTP server
 if $do_publish_on_ftp_server; then
