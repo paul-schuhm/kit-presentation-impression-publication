@@ -8,10 +8,10 @@
 
 # == ALIASES ==
 
-MD2HTML_SLIDES_DECK=(marp --html --allow-local-files)
-MD2PDF=(marp --html --theme theme.css --pdf --allow-local-files)
-MD2EPUB=(pandoc --from=markdown --to=epub --css=style.css)
-OUTPUT_DIR="public"
+WORKING_DIR=$(pwd)
+OUTPUT_DIR="$WORKING_DIR/public"
+ENV_FILE="$WORKING_DIR/.env"
+
 
 # == FUNCTIONS ==
 
@@ -28,49 +28,53 @@ Options:
   --no-pdf            Ne pas générer PDF
   --epub              Générer EPUB
   --no-epub           Ne pas générer EPUB
-  --slides-only       Seulement HTML deck
+  --slides-only       Seulement HTML (Deck + Single Page)
   -h, --help          Afficher ce message
 EOF
     exit 0
 }
 
+function mdslide2htmldeck() {
+    filename=$(basename "$file" .md)
+
+    # Crée style.css si nécessaire
+    [ -e "$WORKING_DIR/style.css" ] || touch "$WORKING_DIR/style.css"
+
+    marp --html --allow-local-files "$1" \
+        -o "${OUTPUT_DIR}/${filename}-deck.html"
+}
+
 # Print slide-deck Markdown document to standalone HTML document
 function mdslide2htmlsingle(){
-	filename="${1%%.*}"
+	filename=$(basename "$file" .md)
 	#Create an empty stylesheet if not found
-	if [ -e "style.css" ]; then
-		echo "Stylesheet style.css found"
-	else
-		touch style.css
-		echo "Empty stylesheet style.css created"
-	fi
+	if [ ! -e "$WORKING_DIR/style.css" ]; then
+    touch "$WORKING_DIR/style.css"
+    echo "Local stylesheet (style.css) created"
+  fi
 
-	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --toc --toc-depth=2 --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
+	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --toc --toc-depth=2 --lua-filter pp-h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
 }
 
 # Print standard Markdown document to PDF
  function md2pdf(){
-  filename="${1%%.*}"
+  filename=$(basename "$file" .md)
 	#Create an empty stylesheet if not found
-	if [ -e "style.css" ]; then
-		echo "Stylesheet style.css found"
-	else
-		touch style.css
-		echo "Empty stylesheet style.css created"
-	fi
+	if [ ! -e "$WORKING_DIR/style.css" ]; then
+    touch "$WORKING_DIR/style.css"
+    echo "Local stylesheet (style.css) created"
+  fi
   pandoc $1 -f markdown+tex_math_double_backslash -t html5 -o ${OUTPUT_DIR}/${filename}.pdf --strip-comments --mathml --css style.css
  }
 
  # Print standard Markdown document to EPUB
  function md2epub(){
-  filename="${1%%.*}"
+  filename=$(basename "$file" .md)
 	#Create an empty stylesheet if not found
-	if [ -e "style.css" ]; then
-		echo "Stylesheet style.css found"
-	else
-		touch style.css
-		echo "Empty stylesheet style.css created"
-	fi
+	if [ ! -e "$WORKING_DIR/style.css" ]; then
+    touch "$WORKING_DIR/style.css"
+    echo "Local stylesheet (style.css) created"
+  fi
 
   pandoc "$1" \
   -f markdown+tex_math_double_backslash \
@@ -83,10 +87,10 @@ function mdslide2htmlsingle(){
 # == BEGINNING OF THE SCRIPT ==
 
 #Load options (FTP credentials, print and publish formats)
-if [[ -f ".env" ]]; then
-    source .env
+if [[ -f "$ENV_FILE" ]]; then
+    source "$ENV_FILE"
 else
-    echo ".env not found"
+    echo "Error: .env not found in $WORKING_DIR."
     exit 1
 fi
 
@@ -134,11 +138,20 @@ done
 
 # Print SOURCES_SLIDES to HTML slide-deck, HTML Single Page, PDF and Epub
 
+# Prexif all sources.
+for i in "${!SOURCES_SLIDES[@]}"; do
+    SOURCES_SLIDES[$i]="$WORKING_DIR/${SOURCES_SLIDES[$i]}"
+done
+
+for i in "${!SOURCES_DOCS[@]}"; do
+    SOURCES_DOCS[$i]="$WORKING_DIR/${SOURCES_DOCS[$i]}"
+done
+
 echo "[ Printing ]"
 
 # Sync assets in public
 echo "Sync assets in ${OUTPUT_DIR} ..."
-mkdir -p public/assets
+mkdir -p "${WORKING_DIR}/public/assets"
 cp -rn assets/* "${OUTPUT_DIR}/assets/"
 echo "Sync assets in ${OUTPUT_DIR} ... Done"
 
@@ -157,30 +170,23 @@ for file in "${SOURCES_SLIDES[@]}"; do
     echo "Publication of  $file... (slide-deck)"
 
     if $do_print_html_deck; then
-      echo "Printing $base to HTML Slides Deck ..."
-        "${MD2HTML_SLIDES_DECK[@]}" "$file" \
-            -o "${OUTPUT_DIR}/${base}-deck.html" \
-            2>/dev/null
+       echo "Printing $base to HTML Slides Deck ..."
+       mdslide2htmldeck "$file" 2>/dev/null
     fi
 
     if $do_print_html_single; then
         echo "Printing $base to HTML Single Page ..."
-        # mdslide2htmlsingle "$file" 2>/dev/null
-        mdslide2htmlsingle "$file"
+        mdslide2htmlsingle "$file" 2>/dev/null
     fi
 
     if $do_print_pdf; then
       echo "Printing $base to PDF..."
-        "${MD2PDF[@]}" "$file" \
-            -o "${OUTPUT_DIR}/${base}.pdf" \
-            2>/dev/null
+      md2pdf "$file" 2>/dev/null
     fi
 
     if $do_print_epub; then
         echo "Printing $base to EPUB ..."
-        "${MD2EPUB[@]}" "$file" \
-            -o "${OUTPUT_DIR}/${base}.epub" \
-            2>/dev/null
+        md2epub "$file" 2>/dev/null
     fi
 done
 
@@ -255,8 +261,3 @@ EOF
     done
   done
 fi
-
-
-
-
-

@@ -78,8 +78,11 @@ SOURCES_DOCS=(
 To install the program globally :
 
 ~~~bash
-sudo cp publish /usr/local/bin/publish
+sudo cp publish /usr/local/bin/pp
+sudo cp pp-h2-link.lua /usr/local/bin/
 ~~~
+
+> We will use **`pp` as an alias of the program** for the rest of the documentation.
 
 ### Write
 
@@ -107,17 +110,17 @@ For layout, edit the following CSS files :
 
 ~~~bash
 # Show help
-publish -h
+pp -h
 # Print all formats (default)
-publish
+pp
 # Print only HTML deck
-./publish --no-html-single --no-pdf --epub --html-deck
+pp --no-html-single --no-pdf --epub --html-deck
 # Or directly
-./publish --slides-only
+pp --slides-only
 # Print only HTML deck + PDF
-./publish --html-deck --pdf --no-html-single --no-epub
+pp --html-deck --pdf --no-html-single --no-epub
 # Print only epub
-./publish --no-html-single --no-html-deck --no-pdf --epub
+pp --no-html-single --no-html-deck --no-pdf --epub
 ~~~
 
 > Printed documents are placed in the `public/` directory by default.
