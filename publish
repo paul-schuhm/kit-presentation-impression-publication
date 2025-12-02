@@ -59,6 +59,18 @@ function mdslide2htmldeck() {
         -o "${OUTPUT_DIR}/${filename}-deck.html"
 }
 
+# Print slide-deck Markdown document to slide-deck PDF
+function mdslide2PDFdeck() {
+    filename=$(basename "$file" .md)
+    #Create an empty stylesheet if not found
+	  if [ ! -e "$WORKING_DIR/style.css" ]; then
+      touch "$WORKING_DIR/style.css"
+      echo "Local stylesheet (style.css) created"
+    fi
+    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" --pdf "$1" \
+        -o "${OUTPUT_DIR}/${filename}-deck.pdf"
+}
+
 # Print slide-deck Markdown document to standalone HTML document
 function mdslide2htmlsingle(){
 	filename=$(basename "$file" .md)
@@ -207,7 +219,7 @@ for file in "${SOURCES_SLIDES[@]}"; do
 
     if $do_print_pdf; then
       echo "Printing $base to PDF..."
-      md2pdf "$file" 2>/dev/null
+      mdslide2PDFdeck "$file" 2>/dev/null
     fi
 
     if $do_print_epub; then
@@ -258,7 +270,8 @@ if $do_publish_on_ftp_server; then
   # Iterate through all sources
   for src in "${SOURCES_SLIDES[@]}" "${SOURCES_DOCS[@]}"; do
 
-    base="${src%.md}"
+    filename=$(basename "$src")      
+    base="${filename%%.*}"     
 
     #Build selection of files to publish (based on user choices)
     files_to_publish=()
