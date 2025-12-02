@@ -60,7 +60,7 @@ lftp -v
 cp .env.dist .env
 ~~~
 
-List the files to print and publish in your `.env` file :
+List the files you want to print and/or publish in your `.env` file :
 
 ~~~.env
 #slide-decks
@@ -73,6 +73,12 @@ SOURCES_DOCS=(
     document.md
     exercices.md
 )
+~~~
+
+To install the program globally :
+
+~~~bash
+sudo cp publish /usr/local/bin/publish
 ~~~
 
 ### Write
@@ -101,17 +107,17 @@ For layout, edit the following CSS files :
 
 ~~~bash
 # Show help
-./publish -h
+publish -h
 # Print all formats (default)
-./publish
+publish
 # Print only HTML deck
-./publish.sh --no-html-single --no-pdf --epub --html-deck
+./publish --no-html-single --no-pdf --epub --html-deck
 # Or directly
-./publish.sh --slides-only
+./publish --slides-only
 # Print only HTML deck + PDF
-./publish.sh --html-deck --pdf --no-html-single --no-epub
+./publish --html-deck --pdf --no-html-single --no-epub
 # Print only epub
-./publish.sh --no-html-single --no-html-deck --no-pdf --epub
+./publish --no-html-single --no-html-deck --no-pdf --epub
 ~~~
 
 > Printed documents are placed in the `public/` directory by default.
