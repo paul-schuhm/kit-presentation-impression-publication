@@ -277,6 +277,7 @@ if $do_publish_on_ftp_server; then
     files_to_publish=()
         [ "$do_publish_html_deck" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}-deck.html")
         [ "$do_publish_html_single" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.html")
+        [ "$do_publish_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}-deck.pdf")
         [ "$do_publish_pdf" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.pdf")
         [ "$do_publish_epub" = true ] && files_to_publish+=("${OUTPUT_DIR}/${base}.epub")
 
