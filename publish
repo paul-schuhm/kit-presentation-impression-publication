@@ -86,6 +86,23 @@ function mdslide2htmlsingle(){
     --lua-filter "$LUA_FILTER" --standalone  --strip-comments --mathml --css "$WORKING_DIR"/style.css --self-contained
 }
 
+
+
+# Print standard Markdown document to HTML Single
+function md2htmlsingle(){
+  filename="${1%%.*}"
+  echo "$filename"
+	#Create an empty stylesheet if not found
+	if [ -e "style.css" ]; then
+		echo "Stylesheet style.css found"
+	else
+		touch style.css
+		echo "Empty stylesheet style.css created"
+	fi
+	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s --toc -o ${filename}.html --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
+}
+
+
 # Print standard Markdown document to PDF
  function md2pdf(){
   filename=$(basename "$file" .md)
