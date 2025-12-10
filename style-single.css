@@ -1,0 +1,59 @@
+/* Global variables */
+:root {
+  --base-font-size: 16px;
+  --h1-font-size: calc(4 * var(--base-font-size));
+  --base-font-size--print: 12pt;
+  --main-bg-color: #fafafa;
+  --main-bg-color-print: #ffffff;
+  --blockquote-bg-color: #d4d4d4;
+  --blockquote-border-color: black;
+  --blockquote-color: black;
+  --pre-bg-color: white;
+  --toc-columns: 1;
+  --toc-fontsize: 8pt;
+}
+
+@media screen {
+  html {
+    width: 70%;
+    margin: auto;
+    background: var(--main-bg-color);
+    font-size: var(--base-font-size);
+  }
+
+  h1 {
+    font-size: var(--h1-font-size);
+  }
+}
+
+/*H2 Anchors*/
+
+/* Hide link '#' next to h2 */
+h2[id] a {
+  text-decoration: none;
+  opacity: 0; /* invisible par défaut */
+  transition: opacity 0.2s;
+  color: inherit;
+  font-size: 0.8em;
+}
+
+/* Show link on h2 hover */
+h2[id]:hover a {
+  opacity: 1;
+}
+
+ul {
+  list-style-type: "- ";
+
+  li {
+    /* Mettre première lettre en lower case */
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
+
+/* For single document */
+h2#table-of-contents + ul li {
+  margin: 0;
+}

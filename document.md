@@ -4,7 +4,7 @@ This document is a regular document, not a slide-deck. Could be anything, for ex
 
 You can previzualise directly this document in any editor supporting Markdown syntax ([Visual Studio Code](https://code.visualstudio.com/docs/languages/markdown), [Retext](https://github.com/retext-project/retext), [Ghostwriter](https://ghostwriter.kde.org/), etc.)
 
-## Table of contents <!-- omit from toc -->
+## Table of contents  <!-- omit from toc -->
 
 - [Useful things to work on Markdown files in Visual Studio Code](#useful-things-to-work-on-markdown-files-in-visual-studio-code)
 - [Adding style in preview](#adding-style-in-preview)

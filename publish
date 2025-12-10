@@ -86,20 +86,15 @@ function mdslide2htmlsingle(){
     --lua-filter "$LUA_FILTER" --standalone  --strip-comments --mathml --css "$WORKING_DIR"/style.css --self-contained
 }
 
-
-
 # Print standard Markdown document to HTML Single
 function md2htmlsingle(){
-  filename="${1%%.*}"
-  echo "$filename"
+  filename=$(basename "$file" .md)
 	#Create an empty stylesheet if not found
-	if [ -e "style.css" ]; then
-		echo "Stylesheet style.css found"
-	else
-		touch style.css
-		echo "Empty stylesheet style.css created"
-	fi
-	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s --toc -o ${filename}.html --lua-filter h2-link.lua --standalone  --strip-comments --mathml --css style.css --self-contained
+	if [ ! -e "$WORKING_DIR/style-single.css" ]; then
+    touch "$WORKING_DIR/style-single.css"
+    echo "Local stylesheet (style-single.css) created"
+  fi
+	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --lua-filter "$LUA_FILTER" --standalone  --strip-comments --mathml --css  "$WORKING_DIR"/style-single.css --self-contained
 }
 
 
@@ -260,7 +255,8 @@ for file in "${SOURCES_DOCS[@]}"; do
 
     if $do_print_html_single; then
         echo "Printing $base to HTML ..."
-        md2htmlsingle "$file" 2>/dev/null
+        # md2htmlsingle "$file" 2>/dev/null
+        md2htmlsingle "$file"
     fi
 
     if $do_print_pdf; then
