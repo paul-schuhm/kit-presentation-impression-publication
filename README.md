@@ -17,27 +17,27 @@
 
 This toolkit lets you produce Markdown-based presentation materials (*slides first*) optimized for printing and multi-format distribution:
 
-- As a *HTML slide deck* for *live presentation*,
-- As a *HTML Single Page* version for online publishing and easy navigation,
-- As a *PDF* for a stable, portable format,
+- As a *HTML slide deck* for *live presentation* ;
+- As a *HTML Single Page* version for online publishing and easy navigation ;
+- As a *PDF* for a stable, portable format ;
 - As an *epub* for e-readers and offline reading (and because it's the best format to read).
 
 You can *also* print *standard Markdown documents* to HTML, PDF or epub.
 
-Finally, the kit lets you publish your prints to a remote FTP server.
+Finally, the kit allows you to publish your prints to a remote FTP server.
 
 ## Design
 
-- It is *simple*;
-- It follows the *necessary* and beneficial *separation* of *content* and *presentation*;
-- It is *just* a shell script that wraps [marp](https://marp.app/) and [pandoc](https://pandoc.org/index.html), adding some *useful extra features* to solve real world use cases.
-
 <img src="./assets/dfd-print-publish.svg" width=700>
+
+- It is *simple* ;
+- It follows the *necessary* and beneficial *separation* of *content* and *presentation* ;
+- It is *just* a shell script that wraps [marp](https://marp.app/) and [pandoc](https://pandoc.org/index.html), adding some *useful extra features* to solve real world use cases.
 
 ## Dependencies
 
-- [Marp](https://marp.app/), a slide deck framework built on Markdown, based on [marpit](https://marpit.marp.app);
-- [pandoc](https://pandoc.org/index.html), a universal document converter. Very powerful and easy to script (lovely);
+- [Marp](https://marp.app/), a slide deck framework built on Markdown, based on [marpit](https://marpit.marp.app) ;
+- [pandoc](https://pandoc.org/index.html), a universal document converter. Very powerful and easy to script (lovely) ;
 - [lftp](https://github.com/lavv17/lftp), an FTP client. Can easily be replaced by another program.
 
 ## Getting Started (workflow)
@@ -55,13 +55,13 @@ lftp -v
 ~~~
 
 1. **Duplicate** the starter kit (Recommended: automate this step with a script);
-2. **Create** a `.env` file to list the sources to be printed and your FTP credentials:
+2. **Create** a `.env` file to list the sources to be printed and your FTP credentials :
 
 ~~~bash
 cp .env.dist .env
 ~~~
 
-List the files you want to print and/or publish in your `.env` file :
+3. **List** the files you want to print and/or publish in your `.env` file :
 
 ~~~.env
 #slide-decks
@@ -75,15 +75,6 @@ SOURCES_DOCS=(
     exercices.md
 )
 ~~~
-
-To install the program globally :
-
-~~~bash
-sudo cp publish /usr/local/bin/pp
-sudo cp pp-h2-link.lua /usr/local/bin/
-~~~
-
-> We will use **`pp` as an alias of the program** for the rest of the documentation.
 
 ### Write
 
@@ -109,6 +100,15 @@ For layout, **edit** the following CSS files (or create your owns) :
 > You can easily override CSS for epub with the [CSS media queries](https://developer.mozilla.org/fr/docs/Web/CSS/Guides/Media_queries/Using#types_de_m%C3%A9dia) : `@media print{...} query`, and for HTML Single Page with `@media screen{...}`.
 
 ### Print and publish
+
+To **install** the program *globally* :
+
+~~~bash
+sudo cp publish /usr/local/bin/pp
+sudo cp pp-h2-link.lua /usr/local/bin/
+~~~
+
+We will use **`pp` as an alias of the program** for the rest of the documentation.
 
 ~~~bash
 # Show help
