@@ -24,7 +24,7 @@ This toolkit lets you produce Markdown-based presentation materials (*slides fir
 
 You can *also* print *standard Markdown documents* to HTML, PDF or epub.
 
-Finally, the kit lets you publish your prints to a remote (S)FTP server.
+Finally, the kit lets you publish your prints to a remote FTP server.
 
 ## Design
 
@@ -127,7 +127,7 @@ pp --no-html-single --no-html-deck --no-pdf --epub
 
 > Printed documents are placed in the `public/` directory by default.
 
-To print **and** **publish** to an (S)FTP server:
+To print **and** **publish** to an FTP(S) server:
 
 ~~~bash
 # Print and publish to an FTP server (HTML Single Page and PDF by default)
