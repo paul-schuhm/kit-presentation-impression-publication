@@ -13,7 +13,7 @@
   - [Tips](#tips)
   - [Useful links](#useful-links)
 
-🇫🇷 [French version](README.fr.md)
+<!-- 🇫🇷 [French version](README.fr.md) -->
 
 This toolkit lets you produce Markdown-based presentation materials (*slides first*) optimized for printing and multi-format distribution:
 
