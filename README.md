@@ -3,7 +3,7 @@
 - [Publishing and distribution kit for Markdown presentations (and regular documents)](#publishing-and-distribution-kit-for-markdown-presentations-and-regular-documents)
   - [Design](#design)
   - [Dependencies](#dependencies)
-  - [Getting Started (workflow)](#getting-started-workflow)
+  - [Getting Started (*workflow*)](#getting-started-workflow)
     - [Setup](#setup)
     - [Write](#write)
     - [Layout and format](#layout-and-format)
@@ -40,7 +40,7 @@ Finally, the kit allows you to publish your prints to a remote FTP server.
 - [pandoc](https://pandoc.org/index.html), a universal document converter. Very powerful and easy to script (lovely) ;
 - [lftp](https://github.com/lavv17/lftp), an FTP client. Can easily be replaced by another program.
 
-## Getting Started (workflow)
+## Getting Started (*workflow*)
 
 > Adapt and improve as needed.
 
@@ -54,7 +54,7 @@ pandoc -v
 lftp -v
 ~~~
 
-1. **Duplicate** the starter kit (Recommended: automate this step with a script);
+1. **Duplicate** the starter kit (Recommended: automate this step with a script).
 2. **Create** a `.env` file to list the sources to be printed and your FTP credentials :
 
 ~~~bash
@@ -78,7 +78,7 @@ SOURCES_DOCS=(
 
 ### Write
 
-1. **Start** the *watch* mode on the file you are working on:
+1. **Start** the *watch* mode on the file you are working on :
 
 ~~~bash
 marp --html --theme theme.css -w --allow-local-files slide-deck.md
