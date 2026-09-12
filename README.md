@@ -55,10 +55,11 @@ lftp -v
 ~~~
 
 1. **Duplicate** the starter kit (Recommended: automate this step with a script).
-2. **Create** a `.env` file to list the sources to be printed and your FTP credentials :
+2. **Create** a `config.pp` file to list the sources to be printed and your FTP credentials :
 
 ~~~bash
-cp .env.dist .env
+publish --init
+# or cp config.pp.dist config.pp
 ~~~
 
 3. **List** the files you want to print and/or publish in your `.env` file :
