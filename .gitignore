@@ -1,4 +1,5 @@
 .env
+config.pp
 public
 references
 *.pdf
