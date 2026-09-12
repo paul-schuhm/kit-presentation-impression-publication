@@ -141,7 +141,7 @@ function mdslide2PDFdeck() {
         -o "$target" 2>/dev/null
 }
 
-# Print slide-deck Markdown document to standalone HTML document
+# Print slide-deck Markdown document to HTML Single Page document
 function mdslide2htmlsingle(){
 
     local file="$1"
@@ -156,16 +156,14 @@ function mdslide2htmlsingle(){
     ensure_style "$WORKING_DIR/style.css"
 
     local tmp_file
+
     tmp_file=$(mktemp --suffix=.md)
 
-    # Nettoyage automatique du fichier temporaire à la sortie de la fonction
+    # Clean temp file at the end of the function
     trap 'rm -f "$tmp_file"' RETURN
 
-    # Application de sed vers le fichier temporaire (le fichier source n'est pas touché)
+    # Add .marp-bg-img class to slide background images (marp format) to temp file 
     sed 's/!\[bg \([^]]*\)\](\([^)]*\))\({\.marp-bg-img}\)\?/![bg \1](\2){.marp-bg-img}/g' "$file" > "$tmp_file"
-
-    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" "$tmp_file" \
-        -o "$target" 2>/dev/null
 
     pandoc "$tmp_file" -f markdown+tex_math_double_backslash -t html5 -s \
          -o "$target" \
@@ -232,7 +230,11 @@ function md2htmlsingle(){
         --mathml 2>/dev/null
  }
 
+
+
 # == BEGINNING OF THE SCRIPT ==
+
+
 
 #Load options from configuration file
 if [[ -f "$ENV_FILE" ]]; then
@@ -352,9 +354,7 @@ for file in "${SOURCES_SLIDES[@]}"; do
         echo "Printing $base to EPUB ..."
         md2epub "$file" 2>/dev/null
     fi
-
 done
-
 
 # Print standard document (SOURCES_DOCS)
 for file in "${SOURCES_DOCS[@]}"; do
