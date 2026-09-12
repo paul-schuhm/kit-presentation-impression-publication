@@ -14,7 +14,7 @@ SOURCES_DOCS=(
 do_print_html_single=true
 do_print_html_deck=true
 do_print_pdf=true
-do_print_epub=true
+do_print_epub=false
 
 #Publication : enable/disable
 do_publish_on_ftp_server=false

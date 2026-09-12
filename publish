@@ -26,6 +26,8 @@ fi
 
 # == FUNCTIONS ==
 
+
+
 function init_directory(){
 	echo "Init..."
 	echo "Creating a config file $ENV_FILE_FILENAME"
@@ -83,6 +85,32 @@ EOF
     exit 0
 }
 
+# Helper function to check if a source file needs rebuilding
+needs_rebuild() {
+    local src="$1"
+    local target="$2"
+    
+    # If target doesn't exist, we must build
+    if [[ ! -f "$target" ]]; then
+        return 0 
+    fi
+    
+    # If source is newer than target, we must rebuild
+    if [[ "$src" -nt "$target" ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+# Ensure local stylesheet exists helper
+function ensure_style() {
+    local style_file="$1"
+    if [ ! -e "$style_file" ]; then
+        touch "$style_file"
+        echo "Local stylesheet ($(basename "$style_file")) created"
+    fi
+}
 
 # Print slide-deck Markdown document to slide-deck html (for live presentation)
 function mdslide2htmldeck() {
@@ -98,29 +126,56 @@ function mdslide2htmldeck() {
 
 # Print slide-deck Markdown document to slide-deck PDF
 function mdslide2PDFdeck() {
-    filename=$(basename "$file" .md)
-    #Create an empty stylesheet if not found
-	  if [ ! -e "$WORKING_DIR/style.css" ]; then
-      touch "$WORKING_DIR/style.css"
-      echo "Local stylesheet (style.css) created"
+    local file="$1"
+    local filename=$(basename "$file" .md)
+    local target="${OUTPUT_DIR}/${filename}-deck.pdf"
+
+    if ! needs_rebuild "$file" "$target"; then
+        echo "  [Skip] $filename-deck.pdf is up to date."
+        return 0
     fi
-    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" --pdf "$1" \
-        -o "${OUTPUT_DIR}/${filename}-deck.pdf"
+
+    echo "Printing $filename to PDF..."
+    ensure_style "$WORKING_DIR/style.css"
+    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" --pdf "$file" \
+        -o "$target" 2>/dev/null
 }
 
 # Print slide-deck Markdown document to standalone HTML document
 function mdslide2htmlsingle(){
-	filename=$(basename "$file" .md)
-	#Create an empty stylesheet if not found
-	if [ ! -e "$WORKING_DIR/style.css" ]; then
-    touch "$WORKING_DIR/style.css"
-    echo "Local stylesheet (style.css) created"
-  fi
 
-	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s \
-     -o ${OUTPUT_DIR}/${filename}.html \
-    --toc --toc-depth=2 \
-    --lua-filter "$LUA_FILTER" --standalone  --strip-comments --mathml --css "$WORKING_DIR"/style.css --self-contained
+    local file="$1"
+    local filename=$(basename "$file" .md)
+    local target="${OUTPUT_DIR}/${filename}.html"
+
+    if ! needs_rebuild "$file" "$target"; then
+        echo "  [Skip] $filename.html is up to date."
+        return 0
+    fi
+
+    ensure_style "$WORKING_DIR/style.css"
+
+    local tmp_file
+    tmp_file=$(mktemp --suffix=.md)
+
+    # Nettoyage automatique du fichier temporaire à la sortie de la fonction
+    trap 'rm -f "$tmp_file"' RETURN
+
+    # Application de sed vers le fichier temporaire (le fichier source n'est pas touché)
+    sed 's/!\[bg \([^]]*\)\](\([^)]*\))\({\.marp-bg-img}\)\?/![bg \1](\2){.marp-bg-img}/g' "$file" > "$tmp_file"
+
+    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" "$tmp_file" \
+        -o "$target" 2>/dev/null
+
+    pandoc "$tmp_file" -f markdown+tex_math_double_backslash -t html5 -s \
+         -o "$target" \
+        --toc --toc-depth=2 \
+        --lua-filter "$LUA_FILTER" \
+        --standalone \
+        --strip-comments \
+        --mathml \
+        --css "$WORKING_DIR/style.css" \
+        --self-contained
 }
 
 # Print standard Markdown document to HTML Single
@@ -137,30 +192,44 @@ function md2htmlsingle(){
 
 # Print standard Markdown document to PDF
  function md2pdf(){
-  filename=$(basename "$file" .md)
-	#Create an empty stylesheet if not found
-	if [ ! -e "$WORKING_DIR/style.css" ]; then
-    touch "$WORKING_DIR/style.css"
-    echo "Local stylesheet (style.css) created"
-  fi
-  pandoc $1 -f markdown+tex_math_double_backslash -t html5 -o ${OUTPUT_DIR}/${filename}.pdf --strip-comments --mathml --css "$WORKING_DIR"/style.css
+
+    local file="$1"
+    local filename=$(basename "$file" .md)
+    local target="${OUTPUT_DIR}/${filename}.pdf"
+
+    if ! needs_rebuild "$file" "$target"; then
+        echo "  [Skip] $filename.pdf is up to date."
+        return 0
+    fi
+
+    echo "Printing $filename to PDF ..."
+    ensure_style "$WORKING_DIR/style.css"
+
+    pandoc "$file" -f markdown+tex_math_double_backslash -t html5 \
+        -o "$target" \
+        --strip-comments --mathml --css "$WORKING_DIR/style.css" 2>/dev/null
  }
 
  # Print standard Markdown document to EPUB
  function md2epub(){
-  filename=$(basename "$file" .md)
-	#Create an empty stylesheet if not found
-	if [ ! -e "$WORKING_DIR/style.css" ]; then
-    touch "$WORKING_DIR/style.css"
-    echo "Local stylesheet (style.css) created"
-  fi
+    local file="$1"
+    local filename=$(basename "$file" .md)
+    local target="${OUTPUT_DIR}/${filename}.epub"
 
-  pandoc "$1" \
-  -f markdown+tex_math_double_backslash \
-  -t epub \
-  -o "${OUTPUT_DIR}/${filename}.epub" \
-  --css "$WORKING_DIR"/style.css \
-  --mathml
+    if ! needs_rebuild "$file" "$target"; then
+        echo "  [Skip] $filename.epub is up to date."
+        return 0
+    fi
+
+    echo "Printing $filename to EPUB ..."
+    ensure_style "$WORKING_DIR/style.css"
+
+    pandoc "$file" \
+        -f markdown+tex_math_double_backslash \
+        -t epub \
+        -o "$target" \
+        --css "$WORKING_DIR/style.css" \
+        --mathml 2>/dev/null
  }
 
 # == BEGINNING OF THE SCRIPT ==
@@ -236,7 +305,7 @@ done
 
 # Print SOURCES_SLIDES to HTML slide-deck, HTML Single Page, PDF and Epub
 
-# Prexif all sources.
+# Prefix all sources
 for i in "${!SOURCES_SLIDES[@]}"; do
     SOURCES_SLIDES[$i]="$WORKING_DIR/${SOURCES_SLIDES[$i]}"
 done
@@ -262,7 +331,7 @@ for file in "${SOURCES_SLIDES[@]}"; do
 
     base=$(basename "$file" .md)
 
-    echo "Publication of  $file... (slide-deck)"
+    echo "Processing $file... (slide-deck)"
 
     if $do_print_html_deck; then
        echo "Printing $base to HTML Slides Deck ..."
@@ -270,12 +339,8 @@ for file in "${SOURCES_SLIDES[@]}"; do
     fi
 
     if $do_print_html_single; then
-        # Add class to each slide bg img (idempotent)
-        sed -i 's/!\[bg \([^]]*\)\](\([^)]*\))\({\.marp-bg-img}\)\?/![bg \1](\2){.marp-bg-img}/g' "$file"
         echo "Printing $base to HTML Single Page ..."
-        #mdslide2htmlsingle "$file" 2>/dev/null
         mdslide2htmlsingle "$file"
-        sed -i 's/!\[bg \([^]]*\)\](\([^)]*\))\({[.]marp-bg-img}\)\?/![bg \1](\2)/g' "$file"
     fi
 
     if $do_print_pdf; then

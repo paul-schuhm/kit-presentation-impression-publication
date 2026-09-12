@@ -1,6 +1,6 @@
 # A single document <!-- omit from toc -->
 
-This document is a regular document, not a slide-deck. Could be anything, for example an exercices sheet.
+This document is a *regular document*, not a slide-deck. Could be anything, for example an exercices sheet.
 
 You can previzualise directly this document in any editor supporting Markdown syntax ([Visual Studio Code](https://code.visualstudio.com/docs/languages/markdown), [Retext](https://github.com/retext-project/retext), [Ghostwriter](https://ghostwriter.kde.org/), etc.)
 
