@@ -15,12 +15,12 @@
   --pre-bg-color: white;
   --toc-columns: 3;
   --toc-fontsize: 8pt;
-  --toc-before-content: "Table des matières";
+  --toc-before-content: "Table of contents";
 }
 
 @media screen {
   html {
-    width: 80%;
+    width: 60%;
     margin: auto;
     background: var(--main-bg-color);
     font-size: var(--base-font-size);
@@ -36,7 +36,7 @@
 
 /* H2 is the heading divider for slides */
 h2 {
-  margin-top: 64px;
+  margin-top: 52px;
 }
 
 img:not(.fixed-size) {
@@ -114,13 +114,6 @@ h2[id]:hover a {
 
 ul {
   list-style-type: "- ";
-
-  li {
-    /* Mettre première lettre en lower case */
-    &::first-letter {
-      text-transform: uppercase;
-    }
-  }
 }
 
 /* For single document */

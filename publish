@@ -30,7 +30,6 @@ function init_directory(){
 	echo "Init..."
 	echo "Creating a config file $ENV_FILE_FILENAME"
 	cat << EOF > "$ENV_FILE_FILENAME"
-
 #slide-decks
 SOURCES_SLIDES=(
 )
@@ -59,7 +58,6 @@ FTP_HOST=""
 FTP_USER=""
 FTP_PASS=""
 REMOTE_DIR=""
-
 EOF
 	echo "Done"
 }
@@ -68,19 +66,19 @@ function show_help() {
     cat <<EOF
 Usage: $0 [options]
 
-Options:
-  --html-single       Générer HTML Single Page (standalone)
-  --no-html-single    Ne pas générer HTML Single Page
-  --html-deck         Générer HTML deck
-  --no-html-deck      Ne pas générer HTML deck
-  --pdf               Générer PDF
-  --no-pdf            Ne pas générer PDF
-  --epub              Générer EPUB
-  --no-epub           Ne pas générer EPUB
-  --slides-only       Seulement HTML (Deck + Single Page)
-  --clean             Supprime tout le contenu publié (pas les sources ;))
-  --init	      Initialise le répertoire (fichier config.pp)
-  -h, --help          Afficher ce message
+Options :
+--init              Initialize the directory (config.pp file)
+--html-deck         Generate HTML deck
+--html-single       Generate single-page HTML (standalone)
+--pdf               Generate PDF
+--slides-only       Only HTML (Deck + Single Page)
+--epub              Generate EPUB
+--no-html-single    Do not generate single-page HTML
+--no-html-deck      Do not generate HTML deck
+--no-pdf            Do not generate PDF
+--no-epub           Do not generate EPUB
+--clean             Delete all previous published content (not the source files)
+-h, --help          Show this help message
 EOF
     exit 0
 }
@@ -167,7 +165,6 @@ function md2htmlsingle(){
 
 # == BEGINNING OF THE SCRIPT ==
 
-
 # Handle user options
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -212,11 +209,11 @@ while [ $# -gt 0 ]; do
             exit 0
             ;;
 
-	 --init)
-		 echo "Init print-publish config file"
-		 init_directory
-		 exit 0
-		 ;;
+	    --init)
+		    echo "Init print-publish config file"
+		    init_directory
+		    exit 0
+		    ;;
 
         -h|--help) show_help ;;
         *)
@@ -263,8 +260,7 @@ for file in "${SOURCES_SLIDES[@]}"; do
         continue
     fi
 
-    # Add class to each slide bg img (idempotent)
-    sed -i 's/!\[bg \([^]]*\)\](\([^)]*\))\({\.marp-bg-img}\)\?/![bg \1](\2){.marp-bg-img}/g' "$file"
+  
 
     base=$(basename "$file" .md)
 
@@ -276,9 +272,12 @@ for file in "${SOURCES_SLIDES[@]}"; do
     fi
 
     if $do_print_html_single; then
+        # Add class to each slide bg img (idempotent)
+        sed -i 's/!\[bg \([^]]*\)\](\([^)]*\))\({\.marp-bg-img}\)\?/![bg \1](\2){.marp-bg-img}/g' "$file"
         echo "Printing $base to HTML Single Page ..."
         #mdslide2htmlsingle "$file" 2>/dev/null
         mdslide2htmlsingle "$file"
+        sed -i 's/!\[bg \([^]]*\)\](\([^)]*\))\({[.]marp-bg-img}\)\?/![bg \1](\2)/g' "$file"
     fi
 
     if $do_print_pdf; then
@@ -290,6 +289,7 @@ for file in "${SOURCES_SLIDES[@]}"; do
         echo "Printing $base to EPUB ..."
         md2epub "$file" 2>/dev/null
     fi
+
 done
 
 

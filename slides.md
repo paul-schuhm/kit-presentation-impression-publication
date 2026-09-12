@@ -17,11 +17,9 @@ theme: theme
 
 A *dummy demo* showcasing the kit for editing, printing, and publishing presentation materials in Markdown format.
 
-> Une présentation présentant le kit d'édition, d'impression et de publication de supports de présentation au format Markdown.
-
 ## Design
 
-![bg right contain](./assets/dfd-print-publish.svg){.marp-bg-img}
+![bg right contain](./assets/dfd-print-publish.svg)
 
 - **A single source of truth**: the Markdown sources;
 - **Separation of content and presentation**: dedicated CSS stylesheets;
@@ -37,8 +35,7 @@ A *dummy demo* showcasing the kit for editing, printing, and publishing presenta
 
 ## Workflow
 
-- [Check the README](https://github.com/paul-schuhm/kit-presentation-impression-publication?tab=readme-ov-file#usage-workflow)
-- [🇫🇷 Consulter le README](https://github.com/paul-schuhm/kit-presentation-impression-publication/blob/main/README.fr.md)
+[Check the README](https://github.com/paul-schuhm/kit-presentation-impression-publication?tab=readme-ov-file#usage-workflow)
 
 ## Slide deck with Marp
 
@@ -54,7 +51,7 @@ It will be stripped out when published, useful for personal notes/comments/info.
 
 ## Background images
 
-![bg right:63%](./assets/blackbird.jpg){.marp-bg-img}
+![bg right:63%](./assets/blackbird.jpg)
 
 > [See all available options](https://marpit.marp.app/image-syntax)
 
@@ -63,7 +60,7 @@ It will be stripped out when published, useful for personal notes/comments/info.
 <!-- _color: gold -->
 <!-- _class: lead -->
 
-![bg cover grayscale:1](./assets/blackbird.jpg){.marp-bg-img}
+![bg cover grayscale:1](./assets/blackbird.jpg)
 
 ## Bullet points
 
