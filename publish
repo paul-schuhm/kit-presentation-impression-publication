@@ -26,8 +26,6 @@ fi
 
 # == FUNCTIONS ==
 
-
-
 function init_directory(){
 	echo "Init..."
 	echo "Creating a config file $ENV_FILE_FILENAME"
@@ -230,15 +228,11 @@ function md2htmlsingle(){
         --mathml 2>/dev/null
  }
 
-
-
 # == BEGINNING OF THE SCRIPT ==
 
-# Init option
 if [ "$1" = "init" ]; then
-	echo "$1 test"
-init_directory
-exit 0
+	init_directory
+	exit 0
 fi
 
 #Load options from configuration file
