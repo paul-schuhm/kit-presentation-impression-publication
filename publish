@@ -31,6 +31,7 @@ fi
 function init_directory(){
 	echo "Init..."
 	echo "Creating a config file $ENV_FILE_FILENAME"
+	mkdir -p assets public
 	cat << EOF > "$ENV_FILE_FILENAME"
 #slide-decks
 SOURCES_SLIDES=(
@@ -85,7 +86,7 @@ EOF
     exit 0
 }
 
-# Helper function to check if a source file needs rebuilding
+# Check if a source file needs rebuilding
 needs_rebuild() {
     local src="$1"
     local target="$2"
@@ -103,7 +104,7 @@ needs_rebuild() {
     return 1
 }
 
-# Ensure local stylesheet exists helper
+# Ensure local stylesheet exists
 function ensure_style() {
     local style_file="$1"
     if [ ! -e "$style_file" ]; then
@@ -112,16 +113,14 @@ function ensure_style() {
     fi
 }
 
-# Print slide-deck Markdown document to slide-deck html (for live presentation)
+# Print slide-deck to slide-deck html (for live presentation)
 function mdslide2htmldeck() {
-    filename=$(basename "$file" .md)
-    #Create an empty stylesheet if not found
-	  if [ ! -e "$WORKING_DIR/style.css" ]; then
-      touch "$WORKING_DIR/style.css"
-      echo "Local stylesheet (style.css) created"
-    fi
+    local file="$1"
+    local filename=$(basename "$file" .md)
+    local target="${OUTPUT_DIR}/${filename}-deck.html"
+    ensure_style "$WORKING_DIR/style.css"
     marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" "$1" \
-        -o "${OUTPUT_DIR}/${filename}-deck.html"
+        -o "$target" 2>dev/null
 }
 
 # Print slide-deck Markdown document to slide-deck PDF
@@ -131,7 +130,7 @@ function mdslide2PDFdeck() {
     local target="${OUTPUT_DIR}/${filename}-deck.pdf"
 
     if ! needs_rebuild "$file" "$target"; then
-        echo "  [Skip] $filename-deck.pdf is up to date."
+        echo "  [Skipped] $filename-deck.pdf is up to date."
         return 0
     fi
 
@@ -149,7 +148,7 @@ function mdslide2htmlsingle(){
     local target="${OUTPUT_DIR}/${filename}.html"
 
     if ! needs_rebuild "$file" "$target"; then
-        echo "  [Skip] $filename.html is up to date."
+        echo "[Skipped] $filename.html is up to date."
         return 0
     fi
 
@@ -179,11 +178,9 @@ function mdslide2htmlsingle(){
 # Print standard Markdown document to HTML Single
 function md2htmlsingle(){
   filename=$(basename "$file" .md)
-	#Create an empty stylesheet if not found
-	if [ ! -e "$WORKING_DIR/style-single.css" ]; then
-    touch "$WORKING_DIR/style-single.css"
-    echo "Local stylesheet (style-single.css) created"
-  fi
+
+    ensure_style "$WORKING_DIR/style.css"
+
 	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --lua-filter "$LUA_FILTER" --standalone  --strip-comments --mathml --css  "$WORKING_DIR"/style-single.css --self-contained
 }
 
@@ -196,11 +193,10 @@ function md2htmlsingle(){
     local target="${OUTPUT_DIR}/${filename}.pdf"
 
     if ! needs_rebuild "$file" "$target"; then
-        echo "  [Skip] $filename.pdf is up to date."
+        echo "[Skipped] $filename.pdf is up to date."
         return 0
     fi
 
-    echo "Printing $filename to PDF ..."
     ensure_style "$WORKING_DIR/style.css"
 
     pandoc "$file" -f markdown+tex_math_double_backslash -t html5 \
@@ -215,7 +211,7 @@ function md2htmlsingle(){
     local target="${OUTPUT_DIR}/${filename}.epub"
 
     if ! needs_rebuild "$file" "$target"; then
-        echo "  [Skip] $filename.epub is up to date."
+        echo "  [Skipped] $filename.epub is up to date."
         return 0
     fi
 
@@ -234,17 +230,23 @@ function md2htmlsingle(){
 
 # == BEGINNING OF THE SCRIPT ==
 
-
+# Init option
+if [ "$1" = "init" ]; then
+	echo "$1 test"
+init_directory
+exit 0
+fi
 
 #Load options from configuration file
 if [[ -f "$ENV_FILE" ]]; then
     source "$ENV_FILE"
 else
     echo "Error: $ENV_FILE_FILENAME not found in $WORKING_DIR."
-    echo "Create a configuration file $ENV_FILE_FILENAME"
+    echo "Create a configuration file $ENV_FILE_FILENAME with pp init"
     echo "Use --help for help"
     exit 1
 fi
+
 
 # Handle user options
 while [ $# -gt 0 ]; do
@@ -284,17 +286,11 @@ while [ $# -gt 0 ]; do
             ;;
 
         --clean)
-            echo "Cleaning $OUTPUT_DIR ..."
+            echo "Cleaning $OUTPUT_DIR..."
             rm -rf "$OUTPUT_DIR"/*
-            echo "Cleaning publications done."
+            echo "...done."
             exit 0
             ;;
-
-	    --init)
-		    echo "Init print-publish config file"
-		    init_directory
-		    exit 0
-		    ;;
 
         -h|--help) show_help ;;
         *)
@@ -305,7 +301,16 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-# Print SOURCES_SLIDES to HTML slide-deck, HTML Single Page, PDF and Epub
+# Print
+
+echo "Printing..."
+echo "Slide decks to print: ${#SOURCES_SLIDES}"
+echo "Documents to print: ${#SOURCES_DOCS}"
+
+if [[ "${#SOURCES_SLIDES}" -eq 0 && "${#SOURCES_DOCS}" -eq 0 ]];then
+	echo "Nothing to print";
+	exit 0;
+fi
 
 # Prefix all sources
 for i in "${!SOURCES_SLIDES[@]}"; do
@@ -316,14 +321,14 @@ for i in "${!SOURCES_DOCS[@]}"; do
     SOURCES_DOCS[$i]="$WORKING_DIR/${SOURCES_DOCS[$i]}"
 done
 
-echo "[ Printing ]"
 
 # Sync assets in public
-echo "Sync assets in ${OUTPUT_DIR} ..."
+echo "Sync assets..."
 mkdir -p "${WORKING_DIR}/public/assets"
-cp -rn assets/* "${OUTPUT_DIR}/assets/"
-echo "Sync assets in ${OUTPUT_DIR} ... Done"
+cp -rn assets "${OUTPUT_DIR}"
+echo "...done"
 
+# Print slide decks
 for file in "${SOURCES_SLIDES[@]}"; do
 
     if [[ ! -f "$file" ]]; then
@@ -333,25 +338,25 @@ for file in "${SOURCES_SLIDES[@]}"; do
 
     base=$(basename "$file" .md)
 
-    echo "Processing $file... (slide-deck)"
+        echo "Printing $base:"
 
     if $do_print_html_deck; then
-       echo "Printing $base to HTML Slides Deck ..."
+       echo "To HTML Slide Deck"
        mdslide2htmldeck "$file" 2>/dev/null
     fi
 
     if $do_print_html_single; then
-        echo "Printing $base to HTML Single Page ..."
+        echo "To HTML Single Page"
         mdslide2htmlsingle "$file"
     fi
 
     if $do_print_pdf; then
-      echo "Printing $base to PDF..."
+      echo "To PDF"
       mdslide2PDFdeck "$file" 2>/dev/null
     fi
 
     if $do_print_epub; then
-        echo "Printing $base to EPUB ..."
+        echo "To EPUB"
         md2epub "$file" 2>/dev/null
     fi
 done
@@ -366,34 +371,31 @@ for file in "${SOURCES_DOCS[@]}"; do
 
     base=$(basename "$file" .md)
 
-    echo "Publication of $file... (standard doc)"
+        echo "Printing ${filename%%.*}..."
 
     if $do_print_html_single; then
-        echo "Printing $base to HTML ..."
+        echo "To HTML"
         # md2htmlsingle "$file" 2>/dev/null
         md2htmlsingle "$file"
     fi
 
     if $do_print_pdf; then
-      echo "Printing $base to PDF ..."
+      echo "To PDF"
       md2pdf "$file" 2>/dev/null
     fi
 
     if $do_print_epub; then
-        echo "Printing $base to EPUB ..."
+        echo "To EPUB"
         md2epub "$file" 2>/dev/null
     fi
 done
 
-echo "[ Printing Done ]"
-echo "Generated files (prints) in $OUTPUT_DIR:"
-find "$OUTPUT_DIR" \( -path "$OUTPUT_DIR/assets" -prune \) -o \( -type f -printf " - %f\n" \)
+echo "...done"
 
 # Publish on FTP server
 if $do_publish_on_ftp_server; then
 
-  echo "[ Publication ]"
-  echo "Publication on remote FTP server..."
+	echo "Publishing (FTP server)...";
 
   # Iterate through all sources
   for src in "${SOURCES_SLIDES[@]}" "${SOURCES_DOCS[@]}"; do
@@ -412,7 +414,7 @@ if $do_publish_on_ftp_server; then
     # Iterate through selected prints to publish
      for file in "${files_to_publish[@]}"; do
 
-        echo "Publication of $file..."
+        echo "Publishing ${filename%%.*}..."
 
         if [[ ! -f "$file" ]]; then
           echo "Error : file $file does not exist."
@@ -425,10 +427,11 @@ put $file
 bye
 EOF
         then
-        echo "File $file published on $FTP_HOST/$REMOTE_DIR !"
+        echo "File $file published on $FTP_HOST/$REMOTE_DIR."
         else
         echo "Error: Failed to upload $file" >&2
         fi
     done
   done
+  echo "...done"
 fi
