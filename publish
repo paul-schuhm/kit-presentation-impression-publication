@@ -1,13 +1,10 @@
 #!/usr/bin/bash
 
-# This program prints Markdown files (slide decks, standard documents) 
-# to different formats (HTML, HTML Single Page, PDF and epub) and
-# allows to publish them on a remote ftp server.
+# This program print Markdown SOURCES_SLIDES (slide-deck, standard document) 
+# to different formats (HTML, HTML Single Page, PDF, epub) and
+# allows to publish them on a ftp server.
 #
-# Dependencies: this program uses and requires marp, pandoc and lftp.
-# See https://github.com/marp-team/marp
-# See https://pandoc.org/
-# See https://lftp.yar.ru/
+# This program uses and requires marp, pandoc and lftp.
 
 # == ALIASES ==
 ENV_FILE_FILENAME="config.pp"
@@ -123,9 +120,11 @@ function mdslide2htmldeck() {
     local file="$1"
     local filename=$(basename "$file" .md)
     local target="${OUTPUT_DIR}/${filename}-deck.html"
+
+    echo "$target"
     ensure_style "$WORKING_DIR/style.css"
-    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" "$1" \
-        -o "$target" 2>dev/null
+    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" "$file" \
+        -o "$target"
 }
 
 # Print slide-deck Markdown document to slide-deck PDF
