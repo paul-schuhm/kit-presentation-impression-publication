@@ -67,20 +67,24 @@ EOF
 
 function show_help() {
     cat <<EOF
-Usage: $0 [options]
+Usage: $0 [CMD] [options]
 
-Options :
---init              Initialize the directory (config.pp file)
+CMD:
+
+init	            Initialize directory (config, folders)
+clean               Delete previsous published content (not the sources)
+
+Options:
+
 --html-deck         Generate HTML deck
 --html-single       Generate single-page HTML (standalone)
 --pdf               Generate PDF
---slides-only       Only HTML (Deck + Single Page)
+--slides-only       Only HTML (Deck and Single Page)
 --epub              Generate EPUB
 --no-html-single    Do not generate single-page HTML
 --no-html-deck      Do not generate HTML deck
 --no-pdf            Do not generate PDF
 --no-epub           Do not generate EPUB
---clean             Delete all previous published content (not the source files)
 -h, --help          Show this help message
 EOF
     exit 0
@@ -285,7 +289,7 @@ while [ $# -gt 0 ]; do
             do_publish_epub=true
             ;;
 
-        --clean)
+        clean)
             echo "Cleaning $OUTPUT_DIR..."
             rm -rf "$OUTPUT_DIR"/*
             echo "...done."

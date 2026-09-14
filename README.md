@@ -14,10 +14,10 @@
 
 This toolkit lets you produce Markdown-based presentation materials (*slides first*) optimized for printing and multi-format distribution:
 
-- As a *HTML slide deck* for *live presentation* ;
-- As a *HTML Single Page* version for online publishing and easy navigation ;
-- As a *PDF* for a stable, portable format ;
-- As an *epub* for e-readers and offline reading (and because it's the best format to read).
+- *HTML slide deck* for *live presentation* ;
+- *HTML Single Page* version for online publishing and easy navigation ;
+- *PDF* for a stable, portable format ;
+- *epub* for e-readers and offline reading (and because it's the best format to read).
 
 You can *also* print *standard Markdown documents* to HTML, PDF or epub.
 
@@ -60,12 +60,13 @@ We will use **`pp` as an alias of the program** for the rest of the documentatio
 
 ### Setup
 
-1. **Create** a `config.pp` file to list the sources to be printed and your FTP credentials:
+1. **Init**:
 
 ~~~bash
-pp --init
-# or cp config.pp.dist config.pp
+pp init
 ~~~
+
+Init a config.pp file to list sources to print, publish, formats and FTP credentials, folder structure.
 
 2. **List** the files you want to print and/or publish in your configuration file:
 
@@ -148,7 +149,7 @@ do_publish_epub=false
 To clean local prints (in `public/`, not the sources !) :
 
 ~~~bash
-pp --clean
+pp clean
 ~~~
 
 ## Notes
