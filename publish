@@ -1,10 +1,13 @@
 #!/usr/bin/bash
 
-# This program print Markdown SOURCES_SLIDES (slide-deck, standard document) 
-# to different formats (HTML, HTML Single Page, PDF, epub) and
-# allows to publish them on a ftp server.
+# This program prints Markdown files (slide decks, standard documents) 
+# to different formats (HTML, HTML Single Page, PDF and epub) and
+# allows to publish them on a remote ftp server.
 #
-# This program uses and requires marp, pandoc and lftp.
+# Dependencies: this program uses and requires marp, pandoc and lftp.
+# See https://github.com/marp-team/marp
+# See https://pandoc.org/
+# See https://lftp.yar.ru/
 
 # == ALIASES ==
 ENV_FILE_FILENAME="config.pp"
