@@ -181,9 +181,10 @@ function mdslide2htmlsingle(){
 
 # Print standard Markdown document to HTML Single
 function md2htmlsingle(){
-  filename=$(basename "$file" .md)
+	local file="$1"
+	local filename=$(basename "$file" .md)
 
-    ensure_style "$WORKING_DIR/style.css"
+    ensure_style "$WORKING_DIR/style-single.css"
 
 	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --lua-filter "$LUA_FILTER" --standalone  --strip-comments --mathml --css  "$WORKING_DIR"/style-single.css --self-contained
 }
@@ -258,7 +259,7 @@ while [ $# -gt 0 ]; do
         --no-html-deck) do_print_html_deck=false ;;
 
         --pdf) do_print_pdf=true ;;
-        --no-pdf) do_do_print_pdf=false ;;
+        --no-pdf) do_print_pdf=false ;;
 
         --epub) do_print_epub=true ;;
         --no-epub) do_print_epub=false ;;
@@ -304,10 +305,10 @@ done
 # Print
 
 echo "Printing..."
-echo "Slide decks to print: ${#SOURCES_SLIDES}"
-echo "Documents to print: ${#SOURCES_DOCS}"
+echo "Slide decks to print: ${#SOURCES_SLIDES[@]}"
+echo "Documents to print: ${#SOURCES_DOCS[@]}"
 
-if [[ "${#SOURCES_SLIDES}" -eq 0 && "${#SOURCES_DOCS}" -eq 0 ]];then
+if [[ "${#SOURCES_SLIDES[@]}" -eq 0 && "${#SOURCES_DOCS[@]}" -eq 0 ]];then
 	echo "Nothing to print";
 	exit 0;
 fi
