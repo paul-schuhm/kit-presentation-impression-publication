@@ -15,6 +15,15 @@ ENV_FILE="$WORKING_DIR/$ENV_FILE_FILENAME"
 LOCAL_LUA="$WORKING_DIR/pp-h2-link.lua"
 GLOBAL_LUA="/usr/local/bin/pp-h2-link.lua"
 
+# STYLE FILES
+
+# used by slide decks (HTML and PDF)
+CSS_THEME="theme.css"
+# used by HTML Single Page and epub
+CSS_STYLE="style.css"
+# used by standard markdown documents (HTML and PDF)
+CSS_DOC="style-doc.css"
+
 if [[ -f "$LOCAL_LUA" ]]; then
     LUA_FILTER="$LOCAL_LUA"
 elif [[ -f "$GLOBAL_LUA" ]]; then
@@ -29,6 +38,8 @@ fi
 function init_directory(){
 	echo "Init..."
 	echo "Creating a config file $ENV_FILE_FILENAME"
+	echo "Creating style files"
+	touch "$CSS_THEME" "$CSS_STYLE" "$CSS_DOC"
 	mkdir -p assets public
 	cat << EOF > "$ENV_FILE_FILENAME"
 #slide-decks
@@ -122,8 +133,8 @@ function mdslide2htmldeck() {
     local target="${OUTPUT_DIR}/${filename}-deck.html"
 
     echo "$target"
-    ensure_style "$WORKING_DIR/style.css"
-    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" "$file" \
+    ensure_style "$WORKING_DIR/$CSS_THEME"
+    marp --html --allow-local-files --theme "$WORKING_DIR/$CSS_THEME" "$file" \
         -o "$target"
 }
 
@@ -139,8 +150,8 @@ function mdslide2PDFdeck() {
     fi
 
     echo "Printing $filename to PDF..."
-    ensure_style "$WORKING_DIR/style.css"
-    marp --html --allow-local-files --theme "$WORKING_DIR/theme.css" --pdf "$file" \
+    ensure_style "$WORKING_DIR/$CSS_THEME"
+    marp --html --allow-local-files --theme "$WORKING_DIR/$CSS_THEME" --pdf "$file" \
         -o "$target" 2>/dev/null
 }
 
@@ -156,7 +167,7 @@ function mdslide2htmlsingle(){
         return 0
     fi
 
-    ensure_style "$WORKING_DIR/style.css"
+    ensure_style "$WORKING_DIR/$CSS_STYLE"
 
     local tmp_file
 
@@ -175,7 +186,7 @@ function mdslide2htmlsingle(){
         --standalone \
         --strip-comments \
         --mathml \
-        --css "$WORKING_DIR/style.css" \
+        --css "$WORKING_DIR/$CSS_STYLE" \
         --self-contained
 }
 
@@ -183,10 +194,16 @@ function mdslide2htmlsingle(){
 function md2htmlsingle(){
 	local file="$1"
 	local filename=$(basename "$file" .md)
+	ensure_style "$WORKING_DIR/$CSS_DOC"
 
-    ensure_style "$WORKING_DIR/style-single.css"
-
-	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s -o ${OUTPUT_DIR}/${filename}.html --lua-filter "$LUA_FILTER" --standalone  --strip-comments --mathml --css  "$WORKING_DIR"/style-single.css --self-contained
+	pandoc $1 -f markdown+tex_math_double_backslash -t html5 -s \
+	       	-o ${OUTPUT_DIR}/${filename}.html \
+	       	--lua-filter "$LUA_FILTER" \
+		--standalone  \
+		--strip-comments \
+		--mathml \
+		--css  "$WORKING_DIR/$CSS_DOC" \
+	       	--self-contained
 }
 
 
@@ -202,11 +219,11 @@ function md2htmlsingle(){
         return 0
     fi
 
-    ensure_style "$WORKING_DIR/style.css"
+    ensure_style "$WORKING_DIR/$CSS_DOC"
 
     pandoc "$file" -f markdown+tex_math_double_backslash -t html5 \
         -o "$target" \
-        --strip-comments --mathml --css "$WORKING_DIR/style.css" 2>/dev/null
+        --strip-comments --mathml --css "$WORKING_DIR/$CSS_DOC" 2>/dev/null
  }
 
  # Print standard Markdown document to EPUB
@@ -221,13 +238,13 @@ function md2htmlsingle(){
     fi
 
     echo "Printing $filename to EPUB ..."
-    ensure_style "$WORKING_DIR/style.css"
+    ensure_style "$WORKING_DIR/$CSS_FILE"
 
     pandoc "$file" \
         -f markdown+tex_math_double_backslash \
         -t epub \
         -o "$target" \
-        --css "$WORKING_DIR/style.css" \
+        --css "$WORKING_DIR/$CSS_FILE" \
         --mathml 2>/dev/null
  }
 
@@ -338,8 +355,7 @@ for file in "${SOURCES_SLIDES[@]}"; do
     fi
 
     base=$(basename "$file" .md)
-
-        echo "Printing $base:"
+    echo "Printing $base:"
 
     if $do_print_html_deck; then
        echo "To HTML Slide Deck"
