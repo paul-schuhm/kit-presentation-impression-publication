@@ -100,9 +100,9 @@ marp --html --theme theme.css -w --allow-local-files slide-deck.md
 
 For layout, **edit** the following CSS files (or create your owns) :
 
-- `theme.css`: used by *HTML* and *PDF* slide decks,
-- `style.css`: used by *HTML Single Page* and *epub*,
-- `style-doc.css`: used by *standard* Markdown documents
+- `theme.css`: used by slide decks (HTML and PDF),
+- `style.css`: used by *HTML Single Page* and *Epub*,
+- `style-doc.css`: used by *standard* Markdown documents (HTML and PDF)
 
 > You can easily override CSS for epub with the [CSS media queries](https://developer.mozilla.org/fr/docs/Web/CSS/Guides/Media_queries/Using#types_de_m%C3%A9dia) : `@media print{...} query`, and for HTML Single Page with `@media screen{...}`.
 
